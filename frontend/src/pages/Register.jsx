@@ -64,7 +64,7 @@ const Register = () => {
   }
   return (
     <div id='register-page' className=' py-10 min-w-full flex flex-col items-center min-h-[100vh] box-border'>
-      <form onSubmit={handleSignUp} className='p-10 pb-5 '>
+      <form onSubmit={handleSignUp} className='md:p-10 p-5 pb-5 '>
         <h2>Instagram</h2>
         <h4 className='text-center'>Sign up to see photos and messages
           <br></br> from your friends.</h4>

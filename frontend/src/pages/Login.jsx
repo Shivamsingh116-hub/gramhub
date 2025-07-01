@@ -12,7 +12,7 @@ const Login = () => {
   }
   return (
     <div id='login-page' className=' py-10 min-w-full flex flex-col items-center min-h-[100vh] box-border'>
-      <form onSubmit={handleLogIn} className='p-10 pb-5 '>
+      <form onSubmit={handleLogIn} className='md:p-10 p-5 pb-5 '>
         <h2>Instagram</h2>
         <div className='mt-8'>
           <input onChange={(e) => setUsername(e.target.value)} placeholder=' ' type='text' required />
