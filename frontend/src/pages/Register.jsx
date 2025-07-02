@@ -117,7 +117,8 @@ const Register = () => {
               }
             } catch (err) {
               if (err.response && err.response.status === 406) {
-                setOtpStatusShow(err.response.data.message)
+                setModalMessage(err.response.data.message)
+                setPopupModal(true)
                 setShowOtpStatement('')
               }
               console.log(err)
