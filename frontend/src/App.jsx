@@ -1,5 +1,5 @@
-import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -12,17 +12,23 @@ import Messages from './components/Messages'
 import Explore from './components/Explore'
 import Notification from './components/Notification'
 import Create from './components/Create'
+import Modal from './Modal'
+import { useContext } from 'react'
+import { Context } from './context/Context'
 
 
 const App = () => {
+
+  const { modalMessage, setPopupModal, popupModal } = useContext(Context)
   return (
-    <BrowserRouter>
+
+    <div>
       <Routes>
         <Route element={<Layout />}>
           <Route path='/' element={<Home />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/search' element={<Search />} />
-          <Route path='/messages' element={< Messages/>} />
+          <Route path='/messages' element={< Messages />} />
           <Route path='/explore' element={<Explore />} />
           <Route path='/notification' element={<Notification />} />
           <Route path='/create' element={<Create />} />
@@ -31,7 +37,8 @@ const App = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
       </Routes>
-    </BrowserRouter>
+      {popupModal && <Modal message={modalMessage} onClose={() => setPopupModal(false)} duration={3000} />}
+    </div>
   )
 }
 
