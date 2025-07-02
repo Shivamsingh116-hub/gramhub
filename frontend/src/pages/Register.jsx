@@ -181,8 +181,8 @@ const Register = () => {
 
   }
   return (
-    <div id='register-page' className=' py-10 min-w-full flex flex-col items-center min-h-[100vh] box-border'>
-      <div className='relative w-full max-w-md'>
+    <div id='register-page' className=' py-10 min-w-full px-3 flex flex-col items-center min-h-[100vh] box-border'>
+      <div className='relative w-full max-w-md '>
         {loading && <Loader />}
         <form onSubmit={handleSignUp} className='relative md:p-10 md:pt-10 pt-8 p-6 pb-5 '>
           <h2>Instagram</h2>
@@ -199,7 +199,7 @@ const Register = () => {
             {emailError && <span className='text-[10px] ml-0.5 text-red-500 font-medium'>{emailError}</span>}
             {showSignUpVerifyBtn && <button type="button" id='signup-verify-btn' className=' text-blue-500 self-start ml-1 mt-0.5' onClick={handleVerify}>Verify</button>}
             {showOtpStatement && <span className='text-[10px] ml-1 text-blue-500 font-medium'>{showOtpStatement}</span>}
-            {otpStatusShow && <span className='text-[10px] ml-0.5 font-medium'>{otpStatusShow}</span>}
+            {otpStatusShow && <span className='text-[10px] ml-0.5 font-medium text-green-600'>{otpStatusShow}</span>}
           </div>
           <div>
             <input onChange={(e) => setPassword(e.target.value)} placeholder=' ' type='password' required />
