@@ -21,8 +21,9 @@ const Register = () => {
   const [otpStatusShow, setOtpStatusShow] = useState('')
   const { setModalMessage, setPopupModal, loading, setLoading } = useContext(Context)
   const validateUsername = (userName) => {
+    setUsername(userName)
     for (const char of userName) {
-      if(char === ' '){
+      if (char === ' ') {
         setUsernameError("Space is not allowed in usernames.")
         return
       }
@@ -42,11 +43,11 @@ const Register = () => {
       return
     }
 
-    setUsername(userName)
     setUsernameError('')
 
   }
   const validateEmail = (userEmail) => {
+    setEmail(userEmail)
     if (userEmail && (!userEmail.includes('@') || userEmail.length < 5)) {
       setEmailError("Invalid email!");
     } else {
@@ -57,8 +58,8 @@ const Register = () => {
 
 
   const handleVerify = async () => {
-    setLoading(true)
     if (!emailError && email) {
+      setLoading(true)
       try {
         const response = await axios.post(`${apiUrl}/api/auth/sendOtp`, { email: email, username: username })
         if (response) {
@@ -71,6 +72,7 @@ const Register = () => {
           const createEditBtn = document.createElement('span')
           createEditBtn.textContent = "✎"
           createEditBtn.className = 'edit-email-btn'
+          createEditBtn.id = 'signup-email-edit-btn'
           const createVerifyDiv = document.createElement('div')
           createVerifyDiv.classList.add('signup-verify-div')
           const createInput = document.createElement('input')
@@ -88,6 +90,7 @@ const Register = () => {
           createVerifyDiv.appendChild(createInput)
           createVerifyDiv.appendChild(verifyOtpBtn)
           container.appendChild(createVerifyDiv)
+          createInput.focus()
           setShowSignUpVerifyBtn(false)
           createEditBtn.addEventListener('click', () => {
             emailInput.disabled = false
@@ -139,6 +142,9 @@ const Register = () => {
         setLoading(false)
       }
     }
+    else {
+      setEmailError("Enter email ")
+    }
     return
 
   }
@@ -165,10 +171,21 @@ const Register = () => {
       return
     }
     try {
+      const createEditBtn = document.getElementById('signup-email-edit-btn')
+      const emailInput = document.getElementById("email")
       const response = await axios.post(`${apiUrl}/api/auth/register`, data)
       if (response) {
         setPopupModal(true)
         setModalMessage(response.data.message)
+        setEmail('')
+        setUsername('')
+        setPassword('')
+        setConfirmPassword('')
+        setIsVerifyClick(false)
+        setShowSignUpVerifyBtn(true)
+        setOtpStatusShow('')
+        emailInput.disabled = false
+        createEditBtn.remove()
       }
     } catch (err) {
       if (err.response && err.response.status === 402) {
@@ -189,12 +206,12 @@ const Register = () => {
           <h4 className='text-center'>Sign up to see photos and messages
             <br></br> from your friends.</h4>
           <div>
-            <input onChange={(e) => validateUsername(e.target.value)} placeholder=' ' type='text' required />
+            <input value={username} onChange={(e) => validateUsername(e.target.value)} placeholder=' ' type='text' required />
             <label>Username</label>
             {usernameError && <span className='text-[10px] ml-0.5 text-red-500 font-medium'>{usernameError}</span>}
           </div>
           <div id='signup-email-container'>
-            <input id='email' onChange={(e) => validateEmail(e.target.value)} placeholder=' ' type='text' required />
+            <input value={email} id='email' onChange={(e) => validateEmail(e.target.value)} placeholder=' ' type='text' required />
             <label>Email</label>
             {emailError && <span className='text-[10px] ml-0.5 text-red-500 font-medium'>{emailError}</span>}
             {showSignUpVerifyBtn && <button type="button" id='signup-verify-btn' className=' text-blue-500 self-start ml-1 mt-0.5' onClick={handleVerify}>Verify</button>}
@@ -202,11 +219,11 @@ const Register = () => {
             {otpStatusShow && <span className='text-[10px] ml-0.5 font-medium text-green-600'>{otpStatusShow}</span>}
           </div>
           <div>
-            <input onChange={(e) => setPassword(e.target.value)} placeholder=' ' type='password' required />
+            <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder=' ' type='password' required />
             <label>Password</label>
           </div>
           <div>
-            <input onChange={(e) => setConfirmPassword(e.target.value)} placeholder=' ' type='password' required />
+            <input value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder=' ' type='password' required />
             <label>Confirm Password</label>
           </div>
           <span className='text-center text-xs'>People who use our service may have
