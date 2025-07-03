@@ -8,7 +8,7 @@ const Modal = ({ message, onClose, duration }) => {
         return () => clearTimeout(timer)
     }, [onClose, duration])
 
-    return createPortal(<div className='fixed font-medium md:text-xl text-xs text-white px-4 py-1 right-5 bottom-5 bg-[linear-gradient(45deg,_#feda75,_#fa7e1e,_#d62976,_#962fbf,_#4f5bd5)] animate-bounce'>
+    return createPortal(<div className='fixed font-medium md:text-[16px] text-sm text-white px-4 py-1 right-5 bottom-5 bg-[linear-gradient(45deg,_#feda75,_#fa7e1e,_#d62976,_#962fbf,_#4f5bd5)] animate-bounce'>
         {message}
     </div>, document.getElementById('modal-root'))
 }

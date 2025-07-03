@@ -198,10 +198,10 @@ const Register = () => {
 
   }
   return (
-    <div id='register-page' className=' py-10 min-w-full px-3 flex flex-col items-center min-h-[100vh] box-border'>
+    <div id='register-page' className=' py-10 min-w-full px-4 flex flex-col items-center min-h-[100vh] box-border'>
       <div className='relative w-full max-w-md '>
         {loading && <Loader />}
-        <form onSubmit={handleSignUp} className='relative md:p-10 md:pt-10 pt-8 p-6 pb-5 '>
+        <form onSubmit={handleSignUp} className='relative md:p-10 md:pt-10 pt-12 p-6 pb-6 '>
           <h2>Instagram</h2>
           <h4 className='text-center'>Sign up to see photos and messages
             <br></br> from your friends.</h4>
@@ -232,7 +232,7 @@ const Register = () => {
             <br></br>
             <Link to='/siginInlearnMore' className='text-blue-400 underline'>Learn More</Link>
           </span>
-          <button type='submit' className='signup-btn shadow-md box-content p-2'>Sign Up</button>
+          <button type='submit' className='signup-btn shadow-xs box-content p-2 '>Sign Up</button>
           <section className='my-5 py-5'>
             <p className='text-xs font-medium'>Have an account ?</p>
             <Link to='/login' className='text-xs text-blue-500 font-bold'>Log in</Link>
