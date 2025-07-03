@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import '../styles/Register.scss'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useContext } from 'react';
 import { Context } from '../context/Context';
@@ -17,9 +17,10 @@ const Register = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [otpError, setOtpError] = useState('')
-  const [showSignUpVerifyBtn, setShowSignUpVerifyBtn] = useState(true)
+  const [showSignUpVerifyBtn, setShowSignUpVerifyBtn] = useState(false)
   const [otpStatusShow, setOtpStatusShow] = useState('')
   const { setModalMessage, setPopupModal, loading, setLoading } = useContext(Context)
+  const navigate = useNavigate()
   const validateUsername = (userName) => {
     setUsername(userName)
     for (const char of userName) {
@@ -47,17 +48,23 @@ const Register = () => {
 
   }
   const validateEmail = (userEmail) => {
+
     setEmail(userEmail)
     if (userEmail && (!userEmail.includes('@') || userEmail.length < 5)) {
+      setShowSignUpVerifyBtn(false)
       setEmailError("Invalid email!");
     } else {
       setEmail(userEmail);
+      setShowSignUpVerifyBtn(true)
       setEmailError('');
     }
   }
 
 
   const handleVerify = async () => {
+    if (!email) {
+      setEmailError("Enter email ")
+    }
     if (!emailError && email) {
       setLoading(true)
       try {
@@ -132,9 +139,11 @@ const Register = () => {
         }
       } catch (err) {
         if (err.response && err.response.status === 500) {
-          setEmailError(err.response.data.message)
+          setPopupModal(true)
+          setModalMessage(err.response.data.message)
         } else if (err.response && err.response.status === 409) {
-          setEmailError(err.response.data.message)
+          setPopupModal(true)
+          setModalMessage(err.response.data.message)
         } else {
           console.log("Internal server error")
         }
@@ -142,9 +151,7 @@ const Register = () => {
         setLoading(false)
       }
     }
-    else {
-      setEmailError("Enter email ")
-    }
+
     return
 
   }
@@ -186,6 +193,8 @@ const Register = () => {
         setOtpStatusShow('')
         emailInput.disabled = false
         createEditBtn.remove()
+        localStorage.setItem("token", response.data.token)
+        navigate('/')
       }
     } catch (err) {
       if (err.response && err.response.status === 402) {

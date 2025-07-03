@@ -6,7 +6,12 @@ const ContextProvider = ({ children }) => {
     const [modalMessage, setModalMessage] = useState('')
     const [popupModal, setPopupModal] = useState(false)
     const [loading, setLoading] = useState(false)
-    const data = { popupModal, setPopupModal, modalMessage, setModalMessage,loading, setLoading }
+    const [token, setToken] = useState('')
+
+    const data = {
+        popupModal, setPopupModal, modalMessage, setModalMessage, loading, setLoading,
+        token, setToken
+    }
     return (
         < Context.Provider value={data}>
             {children}

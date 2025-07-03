@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -15,11 +15,16 @@ import Create from './components/Create'
 import Modal from './Modal'
 import { useContext } from 'react'
 import { Context } from './context/Context'
-
+import { AuthContext } from './context/AuthContext'
 
 const App = () => {
 
   const { modalMessage, setPopupModal, popupModal } = useContext(Context)
+  const { fetchCurrentUserData } = useContext(AuthContext)
+  useEffect(() => {
+    fetchCurrentUserData()
+  }, [])
+
   return (
 
     <div>

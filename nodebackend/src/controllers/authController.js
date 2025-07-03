@@ -1,5 +1,7 @@
 const userModel = require("../models/Users")
-
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
+const jwt_secret_key = process.env.JWT_SECRET_KEY
 const registerUser = async (req, res) => {
     const { username, email, password } = req.body
     console.log(username)
@@ -17,7 +19,14 @@ const registerUser = async (req, res) => {
     try {
         const response = await userModel.create({ username, email, password })
         if (response) {
-            return res.status(200).json({ message: "Registration Successfull" })
+            const payload = {
+                id: response._id,
+                username: response.username,
+                email: response.email
+            }
+            const token = jwt.sign(payload, jwt_secret_key, { expiresIn: '1hr' })
+            console.log(token)
+            return res.status(200).json({ message: "Registration Successfull", token: token })
         }
     } catch (e) {
         return res.status(500).json({ message: "Internal server error" })
@@ -29,8 +38,11 @@ const loginUser = (req, res) => {
     console.log("Reciever lOGIN")
 }
 const getCurrentUser = (req, res) => {
-    res.send('get cureent user!');
-    console.log("Reciever currentUser")
+    const user = req.user
+    if (!user) {
+        return res.status(404).json({ message: "User not found" })
+    }
+    res.status(200).json({ user: user })
 }
 
 
