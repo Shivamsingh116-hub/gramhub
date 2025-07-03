@@ -24,6 +24,10 @@ const Register = () => {
   const validateUsername = (userName) => {
     setUsername(userName)
     for (const char of userName) {
+      if (char !== char.toLowerCase()) {
+        setUsernameError('Uppercase letter not allowed')
+        return
+      }
       if (char === ' ') {
         setUsernameError("Space is not allowed in usernames.")
         return
@@ -207,7 +211,7 @@ const Register = () => {
 
   }
   return (
-    <div id='register-page' className=' py-10 min-w-full px-4 flex flex-col items-center min-h-[100vh] box-border'>
+    <div id='register-page' className=' py-10 min-w-full  flex flex-col items-center min-h-[100vh] box-border'>
       <div className='relative w-full max-w-md '>
         {loading && <Loader />}
         <form onSubmit={handleSignUp} className='relative md:p-10 md:pt-10 pt-12 p-6 pb-6 '>
