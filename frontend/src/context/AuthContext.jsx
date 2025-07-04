@@ -7,7 +7,6 @@ export const AuthContext = createContext()
 const AuthContextProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null)
     const [loadingCurrentUser, setLoadingCurrentUser] = useState(false)
-    const navigate = useNavigate()
     console.log(currentUser)
     const fetchCurrentUserData = useCallback(async () => {
         setLoadingCurrentUser(true)
@@ -38,15 +37,9 @@ const AuthContextProvider = ({ children }) => {
         }
     }, [])
     useEffect(() => {
-        const checkAuth = async () => {
+        fetchCurrentUserData()
+    }, [fetchCurrentUserData])
 
-            await fetchCurrentUserData()
-            if (!currentUser) {
-                navigate('/login')
-            }
-        }
-        checkAuth()
-    }, []);
     const data = useMemo(() => ({
         currentUser, setCurrentUser, fetchCurrentUserData,
         loadingCurrentUser, setLoadingCurrentUser,

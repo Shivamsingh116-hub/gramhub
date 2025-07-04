@@ -6,6 +6,7 @@ import axios from 'axios'
 import { useContext } from 'react';
 import { Context } from '../context/Context';
 import Loader from '../components/Loader';
+import { AuthContext } from '../context/AuthContext';
 const apiUrl = import.meta.env.VITE_API_URL
 const Register = () => {
   const [isVerifyClick, setIsVerifyClick] = useState(false)
@@ -20,6 +21,7 @@ const Register = () => {
   const [showSignUpVerifyBtn, setShowSignUpVerifyBtn] = useState(false)
   const [otpStatusShow, setOtpStatusShow] = useState('')
   const { setModalMessage, setPopupModal, loading, setLoading } = useContext(Context)
+  const { fetchCurrentUserData } = useContext(AuthContext)
   const navigate = useNavigate()
   const validateUsername = (userName) => {
     setUsername(userName)
@@ -198,6 +200,7 @@ const Register = () => {
         emailInput.disabled = false
         createEditBtn.remove()
         localStorage.setItem("token", response.data.token)
+        const user = await fetchCurrentUserData()
         navigate('/')
       }
     } catch (err) {
@@ -205,6 +208,7 @@ const Register = () => {
         setPopupModal(true)
         setModalMessage(err.response.data.message)
       }
+      
     } finally {
       setLoading(false)
     }

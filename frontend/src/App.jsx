@@ -17,23 +17,23 @@ import { useContext } from 'react'
 import { Context } from './context/Context'
 import { AuthContext } from './context/AuthContext'
 import PrivateRoute from './components/PrivateRoute'
+import Loader from './components/Loader'
 
 const App = () => {
 
   const { modalMessage, setPopupModal, popupModal } = useContext(Context)
-  const { fetchCurrentUserData, currentUser } = useContext(AuthContext)
+  const { fetchCurrentUserData, currentUser, loadingCurrentUser } = useContext(AuthContext)
   const navigate = useNavigate()
   useEffect(() => {
-    const checkAuth = async () => {
-
-      await fetchCurrentUserData()
-      if (!currentUser) {
-        navigate('/login')
-      }
+    if (!loadingCurrentUser && !currentUser) {
+      navigate('/login')
     }
-    checkAuth()
-  }, [])
-
+  }, [loadingCurrentUser,currentUser])
+  if (loadingCurrentUser) {
+    return <div>
+      {loadingCurrentUser && <Loader />}
+    </div>
+  }
   return (
 
     <div>
