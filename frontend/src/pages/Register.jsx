@@ -56,6 +56,7 @@ const Register = () => {
   const validateEmail = (userEmail) => {
 
     setEmail(userEmail)
+
     if (userEmail && (!userEmail.includes('@') || userEmail.length < 5)) {
       setShowSignUpVerifyBtn(false)
       setEmailError("Invalid email!");
@@ -74,7 +75,7 @@ const Register = () => {
     if (!emailError && email) {
       setLoading(true)
       try {
-        const response = await axios.post(`${apiUrl}/api/auth/sendOtp`, { email: email,isSignup:true })
+        const response = await axios.post(`${apiUrl}/api/auth/sendOtp`, { email: email.trim(), isSignup: true })
         if (response) {
 
           setShowOtpStatement(response.data.message)
@@ -123,7 +124,7 @@ const Register = () => {
               return
             }
             try {
-              const response = await axios.post(`${apiUrl}/api/auth/verifyOtp`, { email: email, otp: otp })
+              const response = await axios.post(`${apiUrl}/api/auth/verifyOtp`, { email: email.trim(), otp: otp.trim() })
               if (response) {
                 setOtpStatusShow(response.data.message)
                 createVerifyDiv.remove()
@@ -164,7 +165,7 @@ const Register = () => {
   const handleSignUp = async (e) => {
     setLoading(true)
     e.preventDefault()
-    const data = { username: username, email: email, password: password }
+    const data = { username: username.trim(), email: email.trim(), password: password.trim() }
     if (!isVerifyClick) {
       setLoading(false)
       setPopupModal(true)
@@ -208,7 +209,7 @@ const Register = () => {
         setPopupModal(true)
         setModalMessage(err.response.data.message)
       }
-      
+
     } finally {
       setLoading(false)
     }

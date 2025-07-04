@@ -24,7 +24,7 @@ const ForgotPassword = () => {
     setLoading(true)
     try {
       const response = await axios.post(`${apiUrl}/api/auth/sendOtp`, {
-        email: email,
+        email: email.trim(),
         isSignup: false
       })
       if (response.status === 200) {
@@ -53,8 +53,8 @@ const ForgotPassword = () => {
     setLoading(true)
     try {
       const response = await axios.post(`${apiUrl}/api/auth/verifyOtp`, {
-        email,
-        otp
+        email: email.trim(),
+        otp: otp.trim()
       })
       if (response.status === 200) {
         setOtpVerified(true)
@@ -90,8 +90,8 @@ const ForgotPassword = () => {
     setLoading(true)
     try {
       const response = await axios.post(`${apiUrl}/api/auth/forgot-password`, {
-        email,
-        password
+        email: email.trim(),
+        password: password.trim()
       })
       console.log(response)
       if (response.status === 200) {
