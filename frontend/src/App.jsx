@@ -18,6 +18,7 @@ import { Context } from './context/Context'
 import { AuthContext } from './context/AuthContext'
 import PrivateRoute from './components/PrivateRoute'
 import Loader from './components/Loader'
+import ForgotPassword from './pages/ForgotPassword'
 
 const App = () => {
 
@@ -28,7 +29,7 @@ const App = () => {
     if (!loadingCurrentUser && !currentUser) {
       navigate('/login')
     }
-  }, [loadingCurrentUser,currentUser])
+  }, [loadingCurrentUser, currentUser])
   if (loadingCurrentUser) {
     return <div>
       {loadingCurrentUser && <Loader />}
@@ -50,6 +51,7 @@ const App = () => {
         </Route>
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/forgot-password' element={<ForgotPassword />} />
       </Routes>
       {popupModal && <Modal message={modalMessage} onClose={() => setPopupModal(false)} duration={3000} />}
     </div>

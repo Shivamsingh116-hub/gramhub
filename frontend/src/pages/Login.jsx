@@ -61,12 +61,12 @@ const Login = () => {
             <input autoComplete="email" value={userIdentifier} onChange={(e) => setUserIdentifier(e.target.value)} placeholder=' ' type='text' required />
             <label >Username/Email</label>
           </div>
-          <div className=' mt-3'>
+          <div className='mt-3'>
             <input autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder=' ' type='password' required />
             <label>Password</label>
           </div>
           <button disabled={loading} type='submit' className='login-btn shadow-md box-content p-2 mt-4'>Log in</button>
-          <Link to='/forgotPassword' className='self-center text-xs hover:underline hover:cursor-pointer mt-2'>Forgot password?</Link>
+          <Link to='/forgot-password' className='self-center text-xs hover:underline hover:cursor-pointer mt-2'>Forgot password?</Link>
           <section className='my-5 py-5'>
             <p className='text-xs font-medium'>Don't have an account ?</p>
             <Link to='/register' className='text-xs text-blue-500 font-bold'>Sign up</Link>

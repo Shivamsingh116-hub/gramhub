@@ -74,7 +74,7 @@ const Register = () => {
     if (!emailError && email) {
       setLoading(true)
       try {
-        const response = await axios.post(`${apiUrl}/api/auth/sendOtp`, { email: email, username: username })
+        const response = await axios.post(`${apiUrl}/api/auth/sendOtp`, { email: email,isSignup:true })
         if (response) {
 
           setShowOtpStatement(response.data.message)

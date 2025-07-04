@@ -18,7 +18,7 @@ const verifyOtp = async (req, res) => {
 }
 
 const sendOtp = async (req, res) => {
-    const { username, email } = req.body;
+    const { email, isSignup } = req.body;
 
     try {
         const existingUser = await userModel.findOne({ email });
@@ -29,8 +29,10 @@ const sendOtp = async (req, res) => {
                 pass: process.env.EMAIL_PASS,
             }
         });
-
-        if (existingUser) {
+        if (!existingUser && !isSignup) {
+            return res.status(409).json({ message: "No accounts from this email" });
+        }
+        if (existingUser && isSignup) {
             return res.status(409).json({ message: "Email is already in use!" });
         }
         const existingOtp = await otpModel.findOne({ email: email })
