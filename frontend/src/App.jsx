@@ -19,11 +19,12 @@ import { AuthContext } from './context/AuthContext'
 import PrivateRoute from './components/PrivateRoute'
 import Loader from './components/Loader'
 import ForgotPassword from './pages/ForgotPassword'
+import ScrollToTop from './components/ScrollToTop'
 
 const App = () => {
 
   const { modalMessage, setPopupModal, popupModal } = useContext(Context)
-  const { fetchCurrentUserData, currentUser, loadingCurrentUser } = useContext(AuthContext)
+  const { currentUser, loadingCurrentUser } = useContext(AuthContext)
   const navigate = useNavigate()
   useEffect(() => {
     if (!loadingCurrentUser && !currentUser) {
@@ -38,6 +39,7 @@ const App = () => {
   return (
 
     <div>
+      <ScrollToTop />
       <Routes>
         <Route element={<Layout />}>
           <Route path='/' element={<PrivateRoute><Home /></PrivateRoute>} />

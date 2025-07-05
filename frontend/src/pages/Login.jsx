@@ -56,7 +56,7 @@ const Login = () => {
     <div id='login-page' className=' py-10 min-w-full flex flex-col items-center min-h-[100vh] box-border'>
       <div className='relative max-w-md w-full'>
         <form onSubmit={handleLogIn} className='md:p-10 md:pt-10 pt-8 p-6 pb-5 '>
-          <h2>Instagram</h2>
+          <h2>GramHub</h2>
           <div className='mt-8'>
             <input autoComplete="email" value={userIdentifier} onChange={(e) => setUserIdentifier(e.target.value)} placeholder=' ' type='text' required />
             <label >Username/Email</label>

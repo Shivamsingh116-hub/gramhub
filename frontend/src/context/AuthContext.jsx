@@ -1,12 +1,13 @@
 import axios from "axios";
-import { createContext, useCallback, useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { createContext, use, useCallback, useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL
 
 export const AuthContext = createContext()
 const AuthContextProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null)
     const [loadingCurrentUser, setLoadingCurrentUser] = useState(false)
+    const location = useLocation()
     console.log(currentUser)
     const fetchCurrentUserData = useCallback(async () => {
         setLoadingCurrentUser(true)

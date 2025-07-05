@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+
 }
 
 .navigation-item {
@@ -11,69 +12,93 @@
     justify-content: center;
     box-sizing: border-box;
 
+
     li {
-        display: flex;
-        align-items: center;
-        gap: 2px;
-        font-size: 12px;
-        cursor: pointer;
         box-sizing: border-box;
-
-        span {
-            font-size: 15px;
-
-            @media (max-width:900px) {
-                display: none;
-            }
-        }
+        background-color: transparent;
+        border-radius: 5px;
+        color: black;
+        padding: 5px 5px;
+        font-size: 15px;
+        transition: all 0.1s linear;
+        font-weight: 500;
 
         a {
+
             color: inherit;
             display: flex;
             flex-direction: row;
             align-items: center;
             gap: 4px;
             text-decoration: none;
-            font-weight: 400;
 
-            :first-child {
-                font-size: 22px;
+
+            span {
 
                 @media (max-width:900px) {
-                    font-size: 30px;
+                    display: none;
                 }
             }
+
+            :first-child {
+                font-size: 24px;
+
+                @media (max-width:900px) {
+                    font-size: 28px;
+                }
+            }
+
 
         }
 
         &:hover {
-            color: #d62976;
+            background-color: black;
+            color: white;
             cursor: pointer;
         }
 
-
         .active {
             color: #d62976;
+
+            &:hover {
+                color: white;
+                cursor: pointer;
+            }
+
         }
+
     }
 
-    .mobile-button-1,
-    .mobile-button-2 {
-        @media (max-width: 500px) {
+    #Profile {
+
+        &:hover {
+            background-color: black;
+            color: white;
+        }
+
+        @media (max-width:520px) {
             position: fixed;
-            top: 15px;
+            top: 20px;
+            right: 20px;
+            background-color: white;
+            border-radius: 50%;
+            color: black;
+            border: 2px solid black;
+            padding: 4px 4px;
 
-            padding: 5px;
-            border-radius: 6px;
+            a {
+                :first-child {
+                    font-size: 23px;
+                }
+            }
+
+            &:hover {
+                border-radius: 50%;
+                background-color: black;
+                color: white;
+                border: none;
+            }
         }
-    }
-
-    .mobile-button-1 {
-        right: 60px;
-    }
-
-    .mobile-button-2 {
-        right: 20px;
     }
 
     @media (max-width:900px) {
@@ -86,7 +111,7 @@
         width: 100%;
         justify-content: space-around;
         background-color: white;
-        padding: 10px 10px 20px 10px;
+        padding: 10px 10px 15px 10px;
         left: 0px;
         box-shadow: 0px 0px 10px rgba($color: #333, $alpha: 0.2);
     }

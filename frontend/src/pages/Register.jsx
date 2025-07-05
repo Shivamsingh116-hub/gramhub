@@ -220,7 +220,7 @@ const Register = () => {
       <div className='relative w-full max-w-md '>
         {loading && <Loader />}
         <form onSubmit={handleSignUp} className='relative md:p-10 md:pt-10 pt-12 p-6 pb-6 '>
-          <h2>Instagram</h2>
+          <h2>GramHub</h2>
           <h4 className='text-center'>Sign up to see photos and messages
             <br></br> from your friends.</h4>
           <div>
