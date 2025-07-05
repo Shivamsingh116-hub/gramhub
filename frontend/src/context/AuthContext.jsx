@@ -8,6 +8,7 @@ const AuthContextProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null)
     const [loadingCurrentUser, setLoadingCurrentUser] = useState(false)
     const location = useLocation()
+    const navigate = useNavigate()
     console.log(currentUser)
     const fetchCurrentUserData = useCallback(async () => {
         setLoadingCurrentUser(true)
@@ -40,12 +41,12 @@ const AuthContextProvider = ({ children }) => {
     useEffect(() => {
         fetchCurrentUserData()
     }, [fetchCurrentUserData])
-
     const data = useMemo(() => ({
         currentUser, setCurrentUser, fetchCurrentUserData,
         loadingCurrentUser, setLoadingCurrentUser,
         isAuthenticated: !!currentUser
     }), [currentUser, loadingCurrentUser, fetchCurrentUserData])
+
     return (
         <AuthContext.Provider value={data}>
             {children}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useState } from 'react'
 import { createContext } from 'react'
 export const Context = createContext()
@@ -7,10 +7,11 @@ const ContextProvider = ({ children }) => {
     const [popupModal, setPopupModal] = useState(false)
     const [loading, setLoading] = useState(false)
     const [token, setToken] = useState('')
-    const data = {
+    const data = useMemo(() => ({
         popupModal, setPopupModal, modalMessage, setModalMessage, loading, setLoading,
         token, setToken
-    }
+    }),[popupModal,modalMessage,loading,token])
+    
     return (
         < Context.Provider value={data}>
             {children}

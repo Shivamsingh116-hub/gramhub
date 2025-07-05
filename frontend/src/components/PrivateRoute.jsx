@@ -1,13 +1,21 @@
-import React, { useContext } from 'react'
-import { AuthContext } from '../context/AuthContext'
-import { Navigate } from 'react-router-dom'
+import React, { useContext } from 'react';
+import { Navigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import Loader from './Loader';
 
 const PrivateRoute = ({ children }) => {
-    const { currentUser } = useContext(AuthContext)
-    if (!currentUser) {
-        return <Navigate to='/login' replace />
-    }
-    return children
-}
+  const { currentUser, loadingCurrentUser } = useContext(AuthContext);
 
-export default PrivateRoute
+  // Wait for auth to load before making decisions
+  if (loadingCurrentUser) {
+    return <Loader />;
+  }
+
+  if (!currentUser) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};
+
+export default PrivateRoute;

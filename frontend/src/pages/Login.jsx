@@ -14,9 +14,9 @@ const Login = () => {
   const { fetchCurrentUserData } = useContext(AuthContext)
   const navigate = useNavigate()
   useEffect(() => {
-  const token = localStorage.getItem('token');
-  if (token) navigate('/');
-}, []);
+    const token = localStorage.getItem('token');
+    if (token) navigate('/');
+  }, []);
 
   const handleLogIn = async (e) => {
     e.preventDefault()
@@ -44,7 +44,7 @@ const Login = () => {
         setPassword('')
       }
     } catch (e) {
-      const errMessage = e?.response?.data?.message ||  'An unexpected error occurred'
+      const errMessage = e?.response?.data?.message || 'An unexpected error occurred'
       setModalMessage(errMessage)
       setPopupModal(true)
       console.error('Login error:', e);
@@ -65,7 +65,8 @@ const Login = () => {
             <input autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder=' ' type='password' required />
             <label>Password</label>
           </div>
-          <button disabled={loading} type='submit' className='login-btn shadow-md box-content p-2 mt-4'>Log in</button>
+          <button disabled={loading} type='submit' className='login-btn shadow-md box-content p-2 mt-4'>
+            {loading ? 'Processing...' : 'Log in'}</button>
           <Link to='/forgot-password' className='self-center text-xs hover:underline hover:cursor-pointer mt-2'>Forgot password?</Link>
           <section className='my-5 py-5'>
             <p className='text-xs font-medium'>Don't have an account ?</p>

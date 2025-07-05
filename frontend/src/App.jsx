@@ -24,18 +24,8 @@ import ScrollToTop from './components/ScrollToTop'
 const App = () => {
 
   const { modalMessage, setPopupModal, popupModal } = useContext(Context)
-  const { currentUser, loadingCurrentUser } = useContext(AuthContext)
-  const navigate = useNavigate()
-  useEffect(() => {
-    if (!loadingCurrentUser && !currentUser) {
-      navigate('/login')
-    }
-  }, [loadingCurrentUser, currentUser])
-  if (loadingCurrentUser) {
-    return <div>
-      {loadingCurrentUser && <Loader />}
-    </div>
-  }
+
+  
   return (
 
     <div>
