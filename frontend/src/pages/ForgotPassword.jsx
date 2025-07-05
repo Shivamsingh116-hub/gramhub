@@ -119,7 +119,7 @@ const ForgotPassword = () => {
     <div className='flex flex-col items-center min-w-full min-h-[100vh]'>
       <div className='relative max-w-md w-full'>
         <form onSubmit={handleChangePassword} className='flex flex-col space-y-6 justify-center border-0 md:mt-15 mt-5 md:border-[1px] border-gray-300  w-full p-10 '>
-          <h2 style={{ fontFamily: "Edu NSW ACT Cursive, cursive" }} className='font-semibold mt-8 text-2xl self-center'>Forgot Password</h2>
+          <h2 className='font-semibold mt-8 text-[2rem] self-center'>ForgotPassword</h2>
 
           <div className='flex flex-col'>
             <label className='text-sm font-medium mb-0.5'>Email</label>
@@ -180,7 +180,7 @@ const ForgotPassword = () => {
             />
           </div>
 
-          <button type='submit' disabled={loading} className='px-3 mt-5 py-3 text-white font-medium bg-gradient-to-r from-yellow-300 via-pink-500 to-blue-600'>
+          <button type='submit' disabled={loading} className='px-3 mt-5 py-3 hover:cursor-pointer hover:text-black hover:bg-white border-2 font-semibold transition-all duration-100 bg-black text-white  '>
             {loading ? 'Processing...' : 'Change Password'}
           </button>
           <section className='my-5 py-5 border border-gray-300 flex flex-col items-center justify-center'>
