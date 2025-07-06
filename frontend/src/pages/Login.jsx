@@ -13,10 +13,6 @@ const Login = () => {
   const { setModalMessage, setPopupModal, loading, setLoading } = useContext(Context)
   const { fetchCurrentUserData } = useContext(AuthContext)
   const navigate = useNavigate()
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) navigate('/');
-  }, []);
 
   const handleLogIn = async (e) => {
     e.preventDefault()

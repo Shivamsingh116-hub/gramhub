@@ -6,10 +6,7 @@ const apiUrl = import.meta.env.VITE_API_URL
 export const AuthContext = createContext()
 const AuthContextProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null)
-    const [loadingCurrentUser, setLoadingCurrentUser] = useState(false)
-    const location = useLocation()
-    const navigate = useNavigate()
-    console.log(currentUser)
+    const [loadingCurrentUser, setLoadingCurrentUser] = useState(true)
     const fetchCurrentUserData = useCallback(async () => {
         setLoadingCurrentUser(true)
         const token = localStorage.getItem('token')
@@ -28,6 +25,7 @@ const AuthContextProvider = ({ children }) => {
             )
             const user = response?.data?.user || null;
             setCurrentUser(user);
+
         } catch (e) {
             if (e.response?.status === 401 || e.response?.status === 402) {
                 localStorage.removeItem('token')
@@ -37,10 +35,12 @@ const AuthContextProvider = ({ children }) => {
         } finally {
             setLoadingCurrentUser(false)
         }
-    }, [])
+    }, [apiUrl])
+
     useEffect(() => {
         fetchCurrentUserData()
     }, [fetchCurrentUserData])
+
     const data = useMemo(() => ({
         currentUser, setCurrentUser, fetchCurrentUserData,
         loadingCurrentUser, setLoadingCurrentUser,

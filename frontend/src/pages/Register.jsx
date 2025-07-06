@@ -251,7 +251,7 @@ const Register = () => {
             <Link to='/siginInlearnMore' className='text-blue-400 underline'>Learn More</Link>
           </span>
           <button type='submit' className='signup-btn shadow-xs box-content p-2 '>
-            {loading ? 'Processing...' : 'Log in'}</button>
+            {loading ? 'Processing...' : 'Sign up'}</button>
           < section className='my-5 py-5'>
             <p className='text-xs font-medium'>Have an account ?</p>
             <Link to='/login' className='text-xs text-blue-500 font-bold'>Log in</Link>

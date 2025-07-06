@@ -17,7 +17,6 @@ import { useContext } from 'react'
 import { Context } from './context/Context'
 import { AuthContext } from './context/AuthContext'
 import PrivateRoute from './components/PrivateRoute'
-import Loader from './components/Loader'
 import ForgotPassword from './pages/ForgotPassword'
 import ScrollToTop from './components/ScrollToTop'
 
@@ -25,7 +24,7 @@ const App = () => {
 
   const { modalMessage, setPopupModal, popupModal } = useContext(Context)
 
-  
+
   return (
 
     <div>
