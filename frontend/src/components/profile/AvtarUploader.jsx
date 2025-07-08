@@ -119,7 +119,7 @@ const AvatarUploader = ({ currentUser, setCurrentUser, setPopupModal, setModalMe
                     disabled={loading}
                     onChange={handleSelectavatar}
                     className="hidden"
-                    capture='user'
+                   
                 />
 
                 <label
