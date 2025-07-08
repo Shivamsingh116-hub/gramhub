@@ -13,4 +13,7 @@ const Modal = ({ message, onClose, duration }) => {
     </div>, document.getElementById('modal-root'))
 }
 
+
+
+
 export default Modal

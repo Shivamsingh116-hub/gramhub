@@ -5,7 +5,6 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import NoMatch from './pages/NoMatch'
 import Layout from './components/Layout'
-import Profile from './components/Profile'
 import Search from './components/Search'
 import Logout from './components/Logout'
 import Messages from './components/Messages'
@@ -19,6 +18,7 @@ import { AuthContext } from './context/AuthContext'
 import PrivateRoute from './components/PrivateRoute'
 import ForgotPassword from './pages/ForgotPassword'
 import ScrollToTop from './components/ScrollToTop'
+import Profile from './components/profile/Profile'
 
 const App = () => {
 

@@ -13,7 +13,7 @@ const verifyPassword = async (password, hashPassword) => {
     return isMatch
 }
 const generateToken = async (payload) => {
-    const token = await jwt.sign(payload, jwt_secret_key, { expiresIn: "1hr" })
+    const token = await jwt.sign(payload, jwt_secret_key, { expiresIn: "10min" })
     return token
 }
 const registerUser = async (req, res) => {
@@ -62,7 +62,11 @@ const loginUser = async (req, res) => {
                     const payload = {
                         id: response._id,
                         username: response.username,
-                        email: response.email
+                        email: response.email,
+                        avatarURL: response.avatarUrl,
+                        bio: response.bio,
+                        followers: response.followers,
+                        following: response.following
                     }
                     const token = await generateToken(payload)
                     return res.status(200).json({ message: "Login Successfull", token: token })
@@ -122,7 +126,7 @@ const changePassword = async (req, res) => {
             return res.status(404).json({ message: 'User not found.' })
         }
 
-    
+
         const hashedPassword = await generateHashPass(password)
 
 

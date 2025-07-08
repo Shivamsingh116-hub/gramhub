@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const jwt_secret_key = process.env.JWT_SECRET_KEY
 const verifyToken = (req, res, next) => {
-    
+
     try {
         const authHeader = req.headers.authorization
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -15,12 +15,12 @@ const verifyToken = (req, res, next) => {
         next()
     } catch (e) {
         console.log(e)
-        if (e.name == 'TokenExpiredError') {
-            return res.status(404).json({ error: 'Log in again.' });
+        if (e.name === 'TokenExpiredError') {
+            return res.status(440).json({ error: 'Session expired. Please log in again.' });
         } else if (e.name === 'JsonWebTokenError') {
-            return res.status(402).json({ error: 'Invalid token. Access denied.' });
+            return res.status(440).json({ error: 'Invalid token. Access denied.' });
         } else {
-            return res.status(402).json({ error: 'Authentication failed.' });
+            return res.status(401).json({ error: 'Authentication failed.' });
         }
     }
 }

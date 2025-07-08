@@ -1,12 +1,13 @@
-import axios from "axios";
 import { createContext, use, useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import axiosInstance from "../utils/axiosInstance";
 const apiUrl = import.meta.env.VITE_API_URL
 
 export const AuthContext = createContext()
 const AuthContextProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null)
     const [loadingCurrentUser, setLoadingCurrentUser] = useState(true)
+    console.log(currentUser)
     const fetchCurrentUserData = useCallback(async () => {
         setLoadingCurrentUser(true)
         const token = localStorage.getItem('token')
@@ -16,7 +17,7 @@ const AuthContextProvider = ({ children }) => {
             return
         }
         try {
-            const response = await axios.get(`${apiUrl}/api/auth/me`,
+            const response = await axiosInstance.get(`/auth/me`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`

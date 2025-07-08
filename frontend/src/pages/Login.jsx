@@ -6,6 +6,7 @@ import axios from 'axios'
 import { Context } from '../context/Context'
 import { AuthContext } from '../context/AuthContext'
 import Loader from '../components/Loader'
+import axiosInstance from '../utils/axiosInstance'
 const apiUrl = import.meta.env.VITE_API_URL
 const Login = () => {
   const [userIdentifier, setUserIdentifier] = useState('')
@@ -32,6 +33,7 @@ const Login = () => {
       const { message, token } = response?.data || {}
       if (message && token) {
         localStorage.setItem('token', response.data.token)
+        axiosInstance.defaults.headers.common['Authorization']=`Bearer ${token}`
         await fetchCurrentUserData()
         setModalMessage(response.data.message)
         setPopupModal(true)
