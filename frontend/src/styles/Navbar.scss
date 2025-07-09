@@ -69,37 +69,7 @@
 
     }
 
-    #Profile {
-
-        &:hover {
-            background-color: black;
-            color: white;
-        }
-
-        @media (max-width:520px) {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: white;
-            border-radius: 50%;
-            color: black;
-            border: 2px solid black;
-            padding: 4px 4px;
-
-            a {
-                :first-child {
-                    font-size: 23px;
-                }
-            }
-
-            &:hover {
-                border-radius: 50%;
-                background-color: black;
-                color: white;
-                border: none;
-            }
-        }
-    }
+    
 
     @media (max-width:900px) {
         gap: 25px;

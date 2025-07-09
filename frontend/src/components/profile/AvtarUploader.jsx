@@ -8,7 +8,7 @@ import { AVATAR_SIZE_LIMIT } from '../../utils/constants/ImageSizes';
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { Context } from '../../context/Context';
-
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 const AvatarUploader = () => {
     const { currentUser, setCurrentUser } = useContext(AuthContext)
     const { setPopupModal, setModalMessage } = useContext(Context)
@@ -111,6 +111,9 @@ const AvatarUploader = () => {
     }, []);
     return (
         <div className="fixed inset-0  backdrop-blur-sm z-50 flex flex-col justify-center items-center gap-3">
+            <button type='button' disabled={loading} onClick={() => navigate('/profile')}
+                className={`${loading ? 'cursor-not-allowed opacity-50' : 'hover:cursor-pointer'}
+ fixed border rounded-full text-black bg-white  hover:bg-black hover:text-white md:top-10 top-8 right-8 md:right-14  hover:scale-115 transition-all transition-normal duration-100`}><CloseOutlinedIcon /></button>
             <div className="relative w-48 h-48 rounded-full md:w-64 md:h-64 border-2 border-gray-300 shadow-sm overflow-hidden group transition-all duration-200">
                 {avatarUrl ? (
                     <img
@@ -162,7 +165,7 @@ const AvatarUploader = () => {
                     {loading ? 'Uploading...' : 'Upload'}
                 </button>
             </div>
-        </div>
+        </div >
     );
 };
 

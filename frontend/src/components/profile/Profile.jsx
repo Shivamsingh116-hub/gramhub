@@ -5,12 +5,41 @@ import AvatarUploader from './AvtarUploader';
 import UserInfoCard from './UserInfoCard';
 import LogoutButton from '../../utils/LogOutButton';
 import { useNavigate } from 'react-router-dom';
+import Loader from '../Loader';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const Profile = () => {
     const { currentUser, setCurrentUser } = useContext(AuthContext);
+    const [imageLoaded, setImageLoaded] = useState(false);
+    const [imageError, setImageError] = useState(false)
     const { setPopupModal, setModalMessage } = useContext(Context);
     const avatarURL = currentUser?.avatarURL
     const navigate = useNavigate()
+    useEffect(() => {
+        if (!avatarURL) return;
+
+        setImageLoaded(false);
+        setImageError(false);
+
+        const img = new Image();
+        img.src = avatarURL;
+
+        if (img.complete) {
+            // If already loaded from cache
+            setImageLoaded(true);
+        } else {
+            img.onload = () => setImageLoaded(true);
+            img.onerror = () => setImageError(true);
+        }
+
+        return () => {
+            img.onload = null;
+            img.onerror = null;
+        };
+    }, [avatarURL]);
+
+    console.log(imageLoaded, imageError)
     if (!currentUser) {
         return (
             <div className="flex items-center justify-center min-h-screen">
@@ -23,24 +52,31 @@ const Profile = () => {
         <div className="max-w-md relative mx-auto p-6 mt-12 bg-white md:shadow-xl rounded-2xl md:border border-gray-100">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Profile</h2>
 
-            <div className="flex flex-col items-center gap-4">
-                <div tabIndex={0} className='w-28 h-28 box-border overflow-hidden rounded-full' role='button' onKeyDown={(e) => {
+            <div className=" flex flex-col  items-center gap-4">
+                <div tabIndex={0} className='relative w-28 h-28 box-border overflow-hidden rounded-full' role='button' onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === ' ') {
                         navigate('/avatar-uploader')
                     }
                 }} onClick={() => navigate('/avatar-uploader')}>
-                    {avatarURL ? (
+                    {avatarURL && !imageError && (
                         <img
                             src={avatarURL}
                             alt="Avatar"
-                            className="w-full h-full object-cover"
-                            onError={(e) => { e.target.style.display = 'none'; }}
+                            className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                            onLoad={() =>
+                                setImageLoaded(true)
+                            }
+                            onError={() => setImageError(true)}
                         />
-                    ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600 text-4xl font-semibold">
+                    )}
+
+                    {/* Fallback if image fails or not available */}
+                    {(!avatarURL || imageError) && (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600 text-xl font-semibold">
                             {currentUser?.username?.[0]?.toUpperCase() || 'U'}
                         </div>
                     )}
+                    {!imageLoaded && avatarURL && !imageError && <Loader size='sm' />}
                 </div>
                 <UserInfoCard username={currentUser.username} email={currentUser.email} />
                 <LogoutButton setCurrentUser={setCurrentUser} />

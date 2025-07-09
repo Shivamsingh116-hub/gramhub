@@ -13,7 +13,7 @@ axiosInstance.interceptors.request.use(
     }
     ,
     (error) => {
-        if(error?.response?.status===440 || error?.response?.status ===498){
+        if(error?.response?.status === 440 || error?.response?.status ===498){
             localStorage.removeItem('token')
             window.location.href = "/login";
 
