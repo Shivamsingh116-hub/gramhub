@@ -63,10 +63,6 @@ const loginUser = async (req, res) => {
                         id: response._id,
                         username: response.username,
                         email: response.email,
-                        avatarURL: response.avatarUrl,
-                        bio: response.bio,
-                        followers: response.followers,
-                        following: response.following
                     }
                     const token = await generateToken(payload)
                     return res.status(200).json({ message: "Login Successfull", token: token })
@@ -103,12 +99,21 @@ const loginUser = async (req, res) => {
     }
 
 }
-const getCurrentUser = (req, res) => {
-    const user = req.user
-    if (!user) {
-        return res.status(404).json({ message: "User not found" })
+const getCurrentUser = async (req, res) => {
+    try {
+        const user = req.user
+        if (!user) {
+            return res.status(404).json({ message: "User not found" })
+        }
+        const userRes = await userModel.findById(user.id).select('-password')
+        if (!userRes) {
+            return res.status(404).json({ message: "User does not exist in DB" });
+        }
+        res.status(200).json({ user: userRes })
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        return res.status(500).json({ message: "Server error while fetching user" });
     }
-    res.status(200).json({ user: user })
 }
 
 

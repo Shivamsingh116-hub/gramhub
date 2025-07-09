@@ -5,8 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosInstance';
 import Loader from '../Loader';
 import { AVATAR_SIZE_LIMIT } from '../../utils/constants/ImageSizes';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
+import { Context } from '../../context/Context';
 
-const AvatarUploader = ({ currentUser, setCurrentUser, setPopupModal, setModalMessage }) => {
+const AvatarUploader = () => {
+    const { currentUser, setCurrentUser } = useContext(AuthContext)
+    const { setPopupModal, setModalMessage } = useContext(Context)
     const [avatar, setAvatar] = useState('');
     const [avatarUrl, setAvatarUrl] = useState(currentUser.avatarURL);
     const [loading, setLoading] = useState(false);
@@ -24,10 +29,10 @@ const AvatarUploader = ({ currentUser, setCurrentUser, setPopupModal, setModalMe
             setAvatarUrl(localUrl);
         } else {
             setAvatar(null);
-            setAvatarUrl(currentUser.image);
+            setAvatarUrl(currentUser.avatarURL);
         }
     };
-
+    console.log(currentUser)
     const resetFileInput = () => {
         if (fileInputRef.current) fileInputRef.current.value = '';
     };
@@ -69,7 +74,7 @@ const AvatarUploader = ({ currentUser, setCurrentUser, setPopupModal, setModalMe
 
             await axiosInstance.put('/upload/update-profile-photo', {
                 imageUrl: secureUrl,
-                id: currentUser.id
+                id: currentUser._id
             });
 
             setAvatarUrl(secureUrl);
@@ -78,6 +83,7 @@ const AvatarUploader = ({ currentUser, setCurrentUser, setPopupModal, setModalMe
             setPopupModal(true);
             resetFileInput();
             setAvatar(null);
+            navigate('/profile')
         } catch (e) {
             console.log(e);
             setModalMessage(e?.message === "Network Error" ? "Network Error" : "Upload failed. Please try again.");
@@ -94,10 +100,18 @@ const AvatarUploader = ({ currentUser, setCurrentUser, setPopupModal, setModalMe
             }
         };
     }, [avatarUrl]);
+    useEffect(() => {
+        // Disable scroll
+        document.body.style.overflow = 'hidden';
 
+        return () => {
+            // Re-enable scroll when component unmounts
+            document.body.style.overflow = '';
+        };
+    }, []);
     return (
-        <div className="flex flex-col items-center gap-3">
-            <div className="relative w-28 h-28 rounded-full border-2 border-gray-300 shadow-sm overflow-hidden group transition-all duration-200">
+        <div className="fixed inset-0  backdrop-blur-sm z-50 flex flex-col justify-center items-center gap-3">
+            <div className="relative w-48 h-48 rounded-full md:w-64 md:h-64 border-2 border-gray-300 shadow-sm overflow-hidden group transition-all duration-200">
                 {avatarUrl ? (
                     <img
                         src={avatarUrl}
@@ -110,45 +124,44 @@ const AvatarUploader = ({ currentUser, setCurrentUser, setPopupModal, setModalMe
                         {currentUser?.username?.[0]?.toUpperCase() || 'U'}
                     </div>
                 )}
-
-                <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    id="avatarUpload"
-                    disabled={loading}
-                    onChange={handleSelectavatar}
-                    className="hidden"
-                   
-                />
-
+                |{loading && <Loader size='md' />}
+            </div>
+            <div className='flex justify-around mt-5 gap-8 md:gap-16'>
                 <label
                     htmlFor="avatarUpload"
                     tabIndex={0}
                     role="button"
                     aria-label="Upload Avatar"
-                    className="absolute bottom-0 left-0 right-0 bg-gray-400 bg-opacity-60 text-white text-center py-1 text-sm opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity"
-                >
-                    <EditOutlinedIcon fontSize="small" />
+                    className={`w-24 h-10 flex items-center justify-center gap-1  text-sm rounded-md font-medium border transition duration-150 ease-in-out ${loading
+                        ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                        : 'bg-white text-black hover:bg-black hover:text-white'
+                        }`}                >
+                    <EditOutlinedIcon />
+                    Edit
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        id="avatarUpload"
+                        disabled={loading}
+                        onChange={handleSelectavatar}
+                        className="hidden"
+
+                    />
                 </label>
-
-                {loading && <Loader size='sm' />}
-            </div>
-
-            {avatar && (
                 <button
                     type="button"
                     onClick={handleUploadavatar}
                     disabled={loading}
                     aria-disabled={loading}
-                    className={`px-4 py-1.5 text-sm rounded-md font-medium border transition duration-150 ease-in-out ${loading
+                    className={`w-24 h-10  text-sm rounded-md font-medium border transition duration-150 ease-in-out ${loading
                         ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
                         : 'bg-black text-white hover:bg-white hover:text-black hover:border-black'
                         }`}
                 >
                     {loading ? 'Uploading...' : 'Upload'}
                 </button>
-            )}
+            </div>
         </div>
     );
 };

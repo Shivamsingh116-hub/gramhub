@@ -6,12 +6,10 @@ const uploadSignature = (req, res) => {
   const timestamp = Math.floor(Date.now() / 1000);
   const uploadPreset = 'Gramhub.io'
   const public_id = req.body.id
-  console.log(public_id)
   let paramsToSign = `folder=gramhub/avtar&overwrite=true&public_id=${public_id}&timestamp=${timestamp}&upload_preset=${uploadPreset}`
   const signature = crypto.createHash('sha1')
     .update(paramsToSign + process.env.CLOUDINARY_API_SECRET)
     .digest('hex')
-  console.log(signature)
   res.json({
     timestamp,
     signature,
@@ -33,7 +31,7 @@ const updateProfilePhoto = async (req, res) => {
   try {
     const updatedUser = await userModel.findByIdAndUpdate(
       id,
-      { avatarUrl: imageUrl },
+      { avatarURL: imageUrl },
       { new: true } // return updated user
     );
 

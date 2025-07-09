@@ -19,6 +19,7 @@ import PrivateRoute from './components/PrivateRoute'
 import ForgotPassword from './pages/ForgotPassword'
 import ScrollToTop from './components/ScrollToTop'
 import Profile from './components/profile/Profile'
+import AvatarUploader from './components/profile/AvtarUploader'
 
 const App = () => {
 
@@ -38,6 +39,7 @@ const App = () => {
           <Route path='/explore' element={<PrivateRoute><Explore /></PrivateRoute>} />
           <Route path='/notification' element={<PrivateRoute><Notification /></PrivateRoute>} />
           <Route path='/create' element={<PrivateRoute><Create /></PrivateRoute>} />
+          <Route path='/avatar-uploader' element={<PrivateRoute><AvatarUploader /></PrivateRoute>} />
           <Route path='*' element={<NoMatch />} />
         </Route>
         <Route path='/login' element={<Login />} />

@@ -11,7 +11,6 @@ const verifyToken = (req, res, next) => {
         const token = authHeader.split(' ')[1];
         const decoded = jwt.verify(token, jwt_secret_key)
         req.user = decoded
-        console.log(decoded)
         next()
     } catch (e) {
         console.log(e)
