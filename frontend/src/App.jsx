@@ -20,6 +20,7 @@ import ForgotPassword from './pages/ForgotPassword'
 import ScrollToTop from './components/ScrollToTop'
 import Profile from './components/profile/Profile'
 import AvatarUploader from './components/profile/AvtarUploader'
+import EditProfile from './pages/profile/EditProfile'
 
 const App = () => {
 
@@ -42,6 +43,7 @@ const App = () => {
           <Route path='/avatar-uploader' element={<PrivateRoute><AvatarUploader /></PrivateRoute>} />
           <Route path='*' element={<NoMatch />} />
         </Route>
+        <Route path='/edit-profile' element={<PrivateRoute><EditProfile /></PrivateRoute>} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />

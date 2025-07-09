@@ -1,5 +1,9 @@
 const mongoose = require('mongoose')
 const UserSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        default: ''
+    },
     username: {
         type: String,
         required: true,
@@ -18,6 +22,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: '',
         maxlength: 200
+    },
+    gender: {
+        type: String,
+        default: ''
     },
     avatarURL: {
         type: String,

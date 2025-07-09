@@ -53,4 +53,26 @@ const updateProfilePhoto = async (req, res) => {
   }
 };
 
-module.exports = { uploadSignature, updateProfilePhoto };
+const updateProfileData = async (req, res) => {
+  const formData = req.body
+  const { id } = req.user
+  try {
+    const updatedUser = await userModel.findByIdAndUpdate(id, formData, { new: true })
+    if (!updatedUser) {
+      return res.status(404).json({
+        message: "User not found or update failed.",
+        success: false,
+        formData:formData
+      });
+    }
+
+    res.status(200).json({ message: "Profile updated successfully.", success: true })
+  } catch (error) {
+    console.error("Error updating user profile:", error); // professional logging
+    return res.status(500).json({
+      message: "Internal server error.",
+      success: false,
+    });
+  }
+}
+module.exports = { uploadSignature, updateProfilePhoto, updateProfileData };

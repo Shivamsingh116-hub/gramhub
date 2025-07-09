@@ -190,7 +190,7 @@ const ForgotPassword = () => {
         </form>
         {loading && <Loader />}
       </div>
-      <p className='text-sm md:mt-10 text-gray-500'>© 2025 Instagram from Meta</p>
+      <p className='text-xs md:mt-10 text-gray-500'>© 2025 GramHub from Meta</p>
     </div>
   )
 }

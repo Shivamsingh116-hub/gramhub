@@ -50,10 +50,10 @@ const Profile = () => {
 
     return (
         <div className="max-w-md relative mx-auto p-6 mt-12 bg-white md:shadow-xl rounded-2xl md:border border-gray-100">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Profile</h2>
+            <h2 className="text-3xl  font-semibold text-gray-800 mb-4 text-center">ᴘʀᴏꜰɪʟᴇ</h2>
 
-            <div className=" flex flex-col  items-center gap-4">
-                <div tabIndex={0} className='relative w-28 h-28 box-border overflow-hidden rounded-full' role='button' onKeyDown={(e) => {
+            <div className=" flex px-5 flex-col  gap-4">
+                <div tabIndex={0} className='self-center relative w-32 h-32 box-border overflow-hidden rounded-full' role='button' onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === ' ') {
                         navigate('/avatar-uploader')
                     }
@@ -78,7 +78,20 @@ const Profile = () => {
                     )}
                     {!imageLoaded && avatarURL && !imageError && <Loader size='sm' />}
                 </div>
-                <UserInfoCard username={currentUser.username} email={currentUser.email} />
+                <UserInfoCard
+                    username={currentUser.username}
+                    email={currentUser.email}
+                    name={currentUser.name}
+                    bio={currentUser.bio}
+                    gender={currentUser.gender}
+                />
+                <div className='flex flex-row gap-10 '>
+                    <button className='flex-1 py-2.5 bg-black transition-all transition-normal duration-100 hover:cursor-pointer text-white hover:bg-white border hover:text-black font-medium text-xs' type='button' onClick={() => navigate('/edit-profile')}>Edit Profile</button>
+                    <button onClick={() => {
+                        setModalMessage("Project is in process")
+                        setPopupModal(true)
+                    }} className='flex-1 py-2.5 bg-white transition-all transition-normal duration-100 hover:cursor-pointer hover:bg-black border hover:text-white font-medium text-xs'>Share Profile</button>
+                </div>
                 <LogoutButton setCurrentUser={setCurrentUser} />
             </div>
         </div>

@@ -12,14 +12,18 @@ axiosInstance.interceptors.request.use(
         return config
     }
     ,
+    (error) => Promise.reject(error)
+
+
+)
+axiosInstance.interceptors.response.use(
+    (response) => response,
     (error) => {
-        if(error?.response?.status === 440 || error?.response?.status ===498){
-            localStorage.removeItem('token')
+        if (error?.response?.status === 440 || error?.response?.status === 498) {
+            localStorage.removeItem("token");
             window.location.href = "/login";
-
         }
-        Promise.reject(error)
+          return Promise.reject(error);
     }
-
 )
 export default axiosInstance
