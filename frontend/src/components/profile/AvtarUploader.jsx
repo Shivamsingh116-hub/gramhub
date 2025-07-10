@@ -20,6 +20,10 @@ const AvatarUploader = () => {
 
     const handleSelectavatar = (e) => {
         const file = e.target.files[0];
+        if (!(file.type.startsWith('image/'))) {
+            setModalMessage("Select an image file");
+            setPopupModal(true);
+        }
         if (file) {
             if (avatarUrl?.startsWith('blob:')) {
                 URL.revokeObjectURL(avatarUrl);
@@ -144,7 +148,6 @@ const AvatarUploader = () => {
                     <input
                         ref={fileInputRef}
                         type="file"
-                        accept="image/*"
                         id="avatarUpload"
                         disabled={loading}
                         onChange={handleSelectavatar}

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { Context } from '../context/Context';
 
 const Create = ({ onSubmit }) => {
   const [title, setTitle] = useState('');
@@ -6,9 +7,13 @@ const Create = ({ onSubmit }) => {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
+  const { setPopupModal, setModalMessage } = useContext(Context)
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    if (!(file.type.startsWith('image/'))) {
+      setError("Select an image file")
+      return
+    }
     if (file && file.size < 2 * 1024 * 1024) {
       setImage(file);
       setError('');
@@ -74,21 +79,16 @@ const Create = ({ onSubmit }) => {
       <div className="flex items-center gap-4">
         <input
           type="file"
-          accept="image/*"
           onChange={handleImageChange}
           className="file:bg-blue-600 file:text-white file:px-4 file:py-2 file:rounded-lg"
         />
-        {image && (
-          <span className="text-sm text-gray-600">{image.name}</span>
-        )}
       </div>
 
       <button
         type="submit"
         disabled={loading}
-        className={`w-full py-3 px-6 rounded-lg font-semibold text-white transition ${
-          loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
-        }`}
+        className={`w-full py-3 px-6 rounded-lg font-semibold text-white transition ${loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
+          }`}
       >
         {loading ? 'Posting...' : 'Post'}
       </button>
