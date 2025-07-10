@@ -46,7 +46,7 @@ const EditProfile = () => {
         }
     }
     return (
-        <div className='edit-profile w-full h-full flex flex-col items-center mt-14 md:mt-20'>
+        <div className='edit-profile w-full min-h-[100vh] flex flex-col items-center mt-14 md:mt-20'>
             <button type='button' disabled={loading} onClick={() => navigate('/profile')}
                 className={`${loading ? 'cursor-not-allowed opacity-50' : 'hover:cursor-pointer'}
  fixed border rounded-full text-black bg-white  hover:bg-black hover:text-white md:top-10 top-8 right-8 md:right-14  hover:scale-115 transition-all transition-normal duration-100`}><CloseOutlinedIcon /></button>

@@ -23,6 +23,7 @@ const AvatarUploader = () => {
         if (!(file.type.startsWith('image/'))) {
             setModalMessage("Select an image file");
             setPopupModal(true);
+            return
         }
         if (file) {
             if (avatarUrl?.startsWith('blob:')) {
@@ -55,10 +56,8 @@ const AvatarUploader = () => {
 
         setLoading(true);
         try {
-            const { data: sigData } = await axiosInstance.post('/upload/get-upload-signature', {
-                id: currentUser.id
-            });
-
+            const { data: sigData } = await axiosInstance.post('/upload/get-upload-signature');
+            console.log(sigData)
             const formData = new FormData();
             formData.append('file', avatar);
             formData.append('api_key', sigData.apiKey);
@@ -75,10 +74,9 @@ const AvatarUploader = () => {
             );
 
             const secureUrl = uploadRes.data.secure_url;
-
+            console.log(uploadRes.data)
             await axiosInstance.put('/upload/update-profile-photo', {
-                imageUrl: secureUrl,
-                id: currentUser._id
+                imageUrl: secureUrl
             });
 
             setAvatarUrl(secureUrl);

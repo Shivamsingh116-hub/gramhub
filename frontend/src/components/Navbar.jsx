@@ -68,7 +68,7 @@ const Navbar = () => {
                         <ul className="navigation-item">
                             {menuItems.map((item) => {
                                 return (
-                                    <li key={`${item.path}_navitem`} id={item.title} >
+                                    <li key={`${item.path}_navitem`} className='select-none cursor-pointer' id={item.title} >
                                         <NavLink id={item.path} className={({ isActive }) => isActive ? 'active' : ''} to={item.path}>
                                             {item.icon}
                                             <span>{item.title}</span>

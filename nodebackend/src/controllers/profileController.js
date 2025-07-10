@@ -5,8 +5,8 @@ const userModel = require('../models/Users');
 const uploadSignature = (req, res) => {
   const timestamp = Math.floor(Date.now() / 1000);
   const uploadPreset = 'Gramhub.io'
-  const public_id = req.body.id
-  let paramsToSign = `folder=gramhub/avtar&overwrite=true&public_id=${public_id}&timestamp=${timestamp}&upload_preset=${uploadPreset}`
+  const { id } = req.user
+  let paramsToSign = `folder=gramhub/avtar&overwrite=true&public_id=${id}&timestamp=${timestamp}&upload_preset=${uploadPreset}`
   const signature = crypto.createHash('sha1')
     .update(paramsToSign + process.env.CLOUDINARY_API_SECRET)
     .digest('hex')
@@ -17,17 +17,16 @@ const uploadSignature = (req, res) => {
     cloudName: process.env.CLOUDINARY_CLOUD_NAME,
     uploadPreset,
     folder: 'gramhub/avtar',
-    public_id,
+    public_id:id,
     overwrite: true
   });
 };
 const updateProfilePhoto = async (req, res) => {
-  const { imageUrl, id } = req.body;
-
+  const { imageUrl } = req.body;
+  const { id } = req.user
   if (!imageUrl || !id) {
     return res.status(400).json({ success: false, message: 'Missing required fields' });
   }
-
   try {
     const updatedUser = await userModel.findByIdAndUpdate(
       id,
@@ -62,7 +61,7 @@ const updateProfileData = async (req, res) => {
       return res.status(404).json({
         message: "User not found or update failed.",
         success: false,
-        formData:formData
+        formData: formData
       });
     }
 

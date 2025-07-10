@@ -1,99 +1,70 @@
-import React, { useContext, useState } from 'react';
-import { Context } from '../context/Context';
+import React, { useContext, useState } from 'react'
+import { Context } from '../context/Context'
+import axiosInstance from '../utils/axiosInstance'
 
-const Create = ({ onSubmit }) => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [image, setImage] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const { setPopupModal, setModalMessage } = useContext(Context)
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!(file.type.startsWith('image/'))) {
-      setError("Select an image file")
-      return
-    }
-    if (file && file.size < 2 * 1024 * 1024) {
-      setImage(file);
-      setError('');
-    } else {
-      setError('Image must be less than 2MB');
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!title || !content) {
-      setError('Title and content are required');
+const Create = () => {
+  const [imageError, setImageError] = useState('')
+  const [post, setPost] = useState('')
+  const [postURL, setPostURL] = useState('')
+  const { setModalMessage, setPopupModal } = useContext(Context)
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
+    if (!file) {
+      setPost(null);
+      setPostURL(null);
+      setImageError("No image/video selected")
+      return;
+    } const isImage = file.type.startsWith('image/');
+    const isVideo = file.type.startsWith('video/');
+    if (!isImage && !isVideo) {
+      setImageError("Select an image or video file");
       return;
     }
-
-    setLoading(true);
-    try {
-      // Build form data
-      const formData = new FormData();
-      formData.append('title', title);
-      formData.append('content', content);
-      if (image) formData.append('image', image);
-
-      // Call parent handler or API
-      await onSubmit(formData);
-
-      // Reset form
-      setTitle('');
-      setContent('');
-      setImage(null);
-      setError('');
-    } catch (err) {
-      setError('Failed to create post');
-    } finally {
-      setLoading(false);
+    if (postURL?.startsWith('blob:')) {
+      URL.revokeObjectURL(postURL);
     }
-  };
-
+    const localURL = URL.createObjectURL(file);
+    setPost(file);
+    setPostURL(localURL);
+    setImageError("");
+  }
+  const handleUploadPost = async (e) => {
+    e.preventDefault()
+    if (!post) {
+      setImageError("No image selected")
+      return
+    }
+    const isImage = post.type.startsWith('image/')
+    const isVideo = post.type.startsWith('video/')
+    const folder = isImage ? 'image' : isVideo ? 'video' : 'other'
+    try {
+      const { data: sigData } = await axiosInstance.post(`/upload/get-post-upload-signature`, { folder })
+      console.log(sigData)
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-2xl mx-auto bg-white p-6 shadow-lg rounded-2xl space-y-4"
-    >
-      <h2 className="text-2xl font-bold">Create New Post</h2>
+    <div className={`w-full min-h-[100vh] flex flex-col  items-center`}>
+      <div className='w-full max-w-md'>
+        <form onSubmit={handleUploadPost} className={`px-5 py-12 ${post?"mt-16":"mt-40"}  gap-3 border-gray-200 border shadow-md h-full flex-col flex `}>
+          {imageError && <span className='text-red-500 text-sm'>{imageError}</span>}
+          <label className='cursor-pointer select-none self-center bg-black
+           text-white hover:bg-white hover:text-black 
+          border transition-all transition-normal duration-100 px-5 py-2 rounded-md
+          hover:cursor-pointer font-medium text-sm ' role="button" htmlFor='postUpload'>
+            {post?"ChangeFile":"CreatePost"}
+            <input id='postUpload' type='file' onChange={handleFileChange} className='hidden' />
+          </label>
+          {postURL && post?.type.startsWith('image/') && <img src={postURL} className='w-full object-contain max-h-64' alt='post' />}
+          {postURL && post?.type.startsWith('video/') && <video src={postURL} className='w-full object-contain max-h-64' controls alt='post' />}
+          {post && <button className='bg-white py-1 font-medium hover:cursor-pointer text-black hover:bg-black hover:text-white border transition-all transition-normal duration-100' type='submit'>Upload</button>}
 
-      {error && <p className="text-red-500 text-sm">{error}</p>}
-
-      <input
-        type="text"
-        placeholder="Post Title"
-        className="w-full p-3 border rounded-lg focus:outline-none focus:ring"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-
-      <textarea
-        placeholder="Write your post content here..."
-        className="w-full p-3 border rounded-lg min-h-[150px] focus:outline-none focus:ring"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-      ></textarea>
-
-      <div className="flex items-center gap-4">
-        <input
-          type="file"
-          onChange={handleImageChange}
-          className="file:bg-blue-600 file:text-white file:px-4 file:py-2 file:rounded-lg"
-        />
+        </form>
       </div>
+    </div>
+  )
+}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className={`w-full py-3 px-6 rounded-lg font-semibold text-white transition ${loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
-          }`}
-      >
-        {loading ? 'Posting...' : 'Post'}
-      </button>
-    </form>
-  );
-};
-
-export default Create;
+export default Create
