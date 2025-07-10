@@ -6,7 +6,7 @@
 .navigation-item {
     display: flex;
     flex-direction: row;
-    gap: 17px;
+    gap: 20px;
     list-style: none;
     align-items: center;
     justify-content: center;
@@ -51,25 +51,29 @@
 
         }
 
-        &:hover {
-            background-color: black;
-            color: white;
-            cursor: pointer;
-        }
-
         .active {
             color: #d62976;
 
-            &:hover {
-                color: white;
-                cursor: pointer;
+            @media (min-width:520px) {
+                &:hover {
+                    color: white;
+                    cursor: pointer;
+                }
             }
 
         }
 
+        @media (min-width:520px) {
+            &:hover {
+                background-color: black;
+                color: white;
+                cursor: pointer;
+            }
+        }
+
     }
 
-    
+
 
     @media (max-width:900px) {
         gap: 25px;

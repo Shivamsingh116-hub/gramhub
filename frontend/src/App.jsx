@@ -6,9 +6,7 @@ import Register from './pages/Register'
 import NoMatch from './pages/NoMatch'
 import Layout from './components/Layout'
 import Search from './components/Search'
-import Logout from './components/Logout'
 import Messages from './components/Messages'
-import Explore from './components/Explore'
 import Notification from './components/Notification'
 import Create from './components/Create'
 import Modal from './Modal'
@@ -37,7 +35,6 @@ const App = () => {
           <Route path='/profile' element={<PrivateRoute><Profile /></PrivateRoute>} />
           <Route path='/search' element={<PrivateRoute><Search /></PrivateRoute>} />
           <Route path='/messages' element={<PrivateRoute>< Messages /></PrivateRoute>} />
-          <Route path='/explore' element={<PrivateRoute><Explore /></PrivateRoute>} />
           <Route path='/notification' element={<PrivateRoute><Notification /></PrivateRoute>} />
           <Route path='/create' element={<PrivateRoute><Create /></PrivateRoute>} />
           <Route path='/avatar-uploader' element={<PrivateRoute><AvatarUploader /></PrivateRoute>} />

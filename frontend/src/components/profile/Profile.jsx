@@ -49,7 +49,7 @@ const Profile = () => {
     }
 
     return (
-        <div className="max-w-md relative mx-auto p-6 mt-12 bg-white md:shadow-xl rounded-2xl md:border border-gray-100">
+        <div className="max-w-md relative mx-auto p-6 mt-10 bg-white md:shadow-xl rounded-2xl md:border border-gray-100">
             <h2 className="text-3xl  font-semibold text-gray-800 mb-4 text-center">ᴘʀᴏꜰɪʟᴇ</h2>
 
             <div className=" flex px-5 flex-col  gap-4">

@@ -8,7 +8,7 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useNavigate } from 'react-router-dom'
 
 const EditProfile = () => {
-    const { currentUser,setCurrentUser } = useContext(AuthContext)
+    const { currentUser, setCurrentUser } = useContext(AuthContext)
     const [isChecked, setIsChecked] = useState(false)
     const { loading, setLoading, setModalMessage, setPopupModal } = useContext(Context)
     const navigate = useNavigate()
@@ -35,7 +35,7 @@ const EditProfile = () => {
             setModalMessage(updateRes?.message || 'Profile updated.');
             setPopupModal(true);
             navigate('/profile')
-            setCurrentUser((prevData)=>({...prevData,...formData}))
+            setCurrentUser((prevData) => ({ ...prevData, ...formData }))
         } catch (error) {
             const errorMsg = error?.response?.data?.message || 'An unexpected error occurred.';
             setModalMessage(errorMsg);
@@ -101,7 +101,7 @@ const EditProfile = () => {
                             : 'bg-gray-300 text-gray-600 cursor-not-allowed'
                             }`}
                     >
-                        Save
+                        {loading ? "Saving..." : "Save"}
                     </button>
                 </form>
                 {loading && <Loader />}

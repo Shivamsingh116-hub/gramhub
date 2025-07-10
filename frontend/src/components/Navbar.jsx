@@ -23,10 +23,9 @@ const Navbar = () => {
     const menuItems = [
         { path: "/", title: "Home", icon: <HomeOutlinedIcon /> },
         { path: "/search", title: "Search", icon: <SearchOutlinedIcon /> },
-        { path: "/explore", title: "Explore", icon: <ExploreOutlinedIcon /> },
+        { path: "/create", title: "Create", icon: <AddBoxOutlinedIcon /> },
         { path: "/notification", title: "Notification", icon: <FavoriteBorderOutlinedIcon /> },
         { path: "/messages", title: "Messages", icon: <ForumOutlinedIcon /> },
-        { path: "/create", title: "Create", icon: <AddBoxOutlinedIcon /> },
     ]
     useEffect(() => {
         if (!avatarURL) return;
@@ -65,7 +64,7 @@ const Navbar = () => {
                     </Link>
 
                     {/* Navigation */}
-                    <div className='flex flex-row gap-4'>
+                    <div className='flex flex-row gap-6'>
                         <ul className="navigation-item">
                             {menuItems.map((item) => {
                                 return (
