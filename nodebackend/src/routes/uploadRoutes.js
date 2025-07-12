@@ -1,10 +1,11 @@
 const express = require('express')
 const { uploadSignature, updateProfilePhoto, updateProfileData } = require('../controllers/profileController')
 const verifyToken = require('../middleware/auth')
-const { uploadPostSignature } = require('../controllers/postController/postUpload')
+const { uploadPostSignature, uploadPost } = require('../controllers/postController/postUpload')
 const uploadRouter = express.Router()
 uploadRouter.post('/get-upload-signature', verifyToken, uploadSignature)
 uploadRouter.put('/update-profile-photo', verifyToken, updateProfilePhoto)
 uploadRouter.put(`/update-profile-data`, verifyToken, updateProfileData)
 uploadRouter.post('/get-post-upload-signature',verifyToken,uploadPostSignature)
+uploadRouter.post('/post',verifyToken,uploadPost)
 module.exports = uploadRouter

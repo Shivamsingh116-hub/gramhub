@@ -13,7 +13,7 @@ const LogoutButton = ({ setCurrentUser }) => {
     return (
         <button
             onClick={handleLogout}
-            className="mt-6 bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg font-medium transition duration-200"
+            className="mt-6 bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2 rounded-lg font-medium transition duration-200 shadow-md"
         >
             Logout
         </button>

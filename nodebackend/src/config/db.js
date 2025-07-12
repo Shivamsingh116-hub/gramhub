@@ -1,8 +1,27 @@
-const mongoose=require('mongoose')
-require('dotenv').config()
-mongoose.connect(process.env.MONGO_URI).then(()=>{
-    console.log("Server is connected to database")
-}).catch((err)=>{
-    console.log(`Server is not connected to database due to ${err}`)
-})
-module.exports=mongoose
+const mongoose = require("mongoose");
+
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 10000, // Wait 10s before timeout
+    });
+
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+  } catch (err) {
+    console.error(`❌ MongoDB Connection Error: ${err.message}`);
+    process.exit(1); // Exit the process with failure
+  }
+
+  // Optional: Monitor disconnection events
+  mongoose.connection.on("disconnected", () => {
+    console.warn("⚠️  MongoDB disconnected");
+  });
+
+  mongoose.connection.on("error", (err) => {
+    console.error("❌ MongoDB connection error:", err);
+  });
+};
+
+module.exports = connectDB;

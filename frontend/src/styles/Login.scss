@@ -1,102 +1,93 @@
 #login-page {
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid #bae6fd; // light cyan border
 
-
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        border: 1px solid rgb(219, 219, 219);
-
-        h2 {
-
-            font-weight: 600;
-            font-size: 2.2rem;
-            align-self: center;
-        }
-
-        div {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            position: relative;
-
-            label {
-                font-weight: 500;
-                font-size: 15px;
-            }
-
-            input {
-                border: 1px solid rgb(219, 219, 219);
-                border-radius: 2px;
-                padding: 10px;
-                font-size: 0.8rem;
-                background-color: rgb(250, 250, 250);
-                outline: none;
-                min-width: 250px;
-
-                &:hover {
-                    border: 1px solid rgb(175, 175, 175);
-                }
-
-                &:focus+label,
-                &:not(:placeholder-shown)+label {
-                    top: -10px;
-                    background-color: white;
-                    border-radius: 5px;
-                }
-            }
-
-            label {
-                position: absolute;
-                left: 10px;
-                top: 10px;
-                color: #888;
-                font-size: 13px;
-                pointer-events: none;
-                transition: 0.2s ease all;
-                padding: 0 4px;
-            }
-
-
-        }
-
-
-
-        .login-btn {
-            transition: all 0.1s ease-in-out;
-            margin-top: 10px;
-            color: white;
-            background-color: black;
-            border: 2px solid white;
-            font-weight: 550;
-
-            &:hover {
-
-                color: black;
-                background-color: white;
-                border: 2px solid black;
-                cursor: pointer;
-            }
-        }
-
-        section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border: 1px solid rgb(219, 219, 219);
-            width: 100%;
-        }
-
-        @media (max-width:520px) {
-            border: none;
-        }
+    h2 {
+      font-weight: 600;
+      font-size: 2.2rem;
+      align-self: center;
+      color: #0e7490; // cyan-700
     }
 
-    p {
-        color: rgb(155, 155, 155);
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      position: relative;
+
+      label {
         font-weight: 500;
+        font-size: 15px;
+      }
 
+      input {
+        border: 1px solid #a5f3fc; // cyan-200
+        border-radius: 4px;
+        padding: 10px;
+        font-size: 0.85rem;
+        background-color: #f0f9ff; // cyan-50
+        outline: none;
+        min-width: 250px;
+        color: #0f172a; // slate-900
+
+        &:hover {
+          border: 1px solid #22d3ee; // cyan-400
+        }
+
+        &:focus + label,
+        &:not(:placeholder-shown) + label {
+          top: -10px;
+          background-color: #ffffff;
+          border-radius: 5px;
+        }
+      }
+
+      label {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        color: #64748b; // slate-500
+        font-size: 13px;
+        pointer-events: none;
+        transition: 0.2s ease all;
+        padding: 0 4px;
+      }
     }
 
+    .login-btn {
+      transition: all 0.1s ease-in-out;
+      margin-top: 10px;
+      color: white;
+      background-color: #06b6d4; // cyan-500
+      border: 2px solid transparent;
+      font-weight: 550;
 
+      &:hover {
+        color: #06b6d4; // cyan-500
+        background-color: white;
+        border: 2px solid #06b6d4;
+        cursor: pointer;
+      }
+    }
+
+    section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid #bae6fd; // cyan-100
+      width: 100%;
+    }
+
+    @media (max-width: 520px) {
+      border: none;
+    }
+  }
+
+  p {
+    color: #64748b; // slate-500
+    font-weight: 500;
+  }
 }

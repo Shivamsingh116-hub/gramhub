@@ -5,13 +5,14 @@ export const Context = createContext()
 const ContextProvider = ({ children }) => {
     const [modalMessage, setModalMessage] = useState('')
     const [popupModal, setPopupModal] = useState(false)
-    const [loading, setLoading] = useState(false)
     const [token, setToken] = useState('')
+    const [recentPostUploadData, setRecentPostUploadData] = useState(null)
+   
     const data = useMemo(() => ({
-        popupModal, setPopupModal, modalMessage, setModalMessage, loading, setLoading,
-        token, setToken
-    }),[popupModal,modalMessage,loading,token])
-    
+        popupModal, setPopupModal, modalMessage, setModalMessage,
+        token, setToken, recentPostUploadData, setRecentPostUploadData
+    }), [popupModal, modalMessage, token, recentPostUploadData])
+    console.log(recentPostUploadData)
     return (
         < Context.Provider value={data}>
             {children}

@@ -216,50 +216,69 @@ const Register = () => {
 
   }
   return (
-    <div id='register-page' className=' py-10 min-w-full  flex flex-col items-center min-h-[100vh] box-border'>
-      <div className='relative w-full max-w-md '>
-        {loading && <Loader />}
-        <form onSubmit={handleSignUp} className='relative md:p-10 md:pt-10 pt-12 p-6 pb-6 '>
-          <h2>GramHub</h2>
-          <h4 className='text-center'>Sign up to see photos and messages
-            <br></br> from your friends.</h4>
+    <div id='register-page' className='relative py-10 min-w-full flex flex-col items-center min-h-[100vh] bg-white box-border'>
+      <div className='w-full max-w-md'>
+        <form onSubmit={handleSignUp} className='relative md:p-10 md:pt-10 pt-12 p-6 pb-6 bg-transparent md:bg-blue-50 rounded-lg md:shadow-md'>
+          <h2 className='text-center text-cyan-700 font-bold text-2xl mb-2'>GramHub</h2>
+          <h4 className='text-center text-gray-600 text-sm mb-6'>
+            Sign up to see photos and messages <br /> from your friends.
+          </h4>
+
           <div>
-            <input value={username} onChange={(e) => validateUsername(e.target.value)} placeholder=' ' type='text' required />
-            <label>Username</label>
+            <input value={username} onChange={(e) => validateUsername(e.target.value)} placeholder=' ' type='text' required className='w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-white' />
+            <label className='text-sm text-gray-600 ml-1'>Username</label>
             {usernameError && <span className='text-[10px] ml-0.5 text-red-500 font-medium'>{usernameError}</span>}
           </div>
-          <div id='signup-email-container'>
-            <input value={email} id='email' onChange={(e) => validateEmail(e.target.value)} placeholder=' ' type='text' required />
-            <label>Email</label>
+
+          <div id='signup-email-container' className='mt-1'>
+            <input value={email} id='email' onChange={(e) => validateEmail(e.target.value)} placeholder=' ' type='text' required className='w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-white' />
+            <label className='text-sm text-gray-600 ml-1'>Email</label>
+
             {emailError && <span className='text-[10px] ml-0.5 text-red-500 font-medium'>{emailError}</span>}
-            {showSignUpVerifyBtn && <button type="button" id='signup-verify-btn' className=' text-blue-500 self-start ml-1 mt-0.5' onClick={handleVerify}>Verify</button>}
-            {showOtpStatement && <span className='text-[10px] ml-1 text-blue-500 font-medium'>{showOtpStatement}</span>}
+
+            {showSignUpVerifyBtn && (
+              <button
+                type="button"
+                id='signup-verify-btn'
+                className='text-cyan-700 underline text-sm ml-1 mt-0.5 hover:text-cyan-800 transition'
+                onClick={handleVerify}>
+                Verify
+              </button>
+            )}
+
+            {showOtpStatement && <span className='text-[10px] ml-1 text-cyan-700 font-medium'>{showOtpStatement}</span>}
             {otpStatusShow && <span className='text-[10px] ml-0.5 font-medium text-green-600'>{otpStatusShow}</span>}
           </div>
-          <div>
-            <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder=' ' type='password' required />
-            <label>Password</label>
+
+          <div className='mt-1'>
+            <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder=' ' type='password' required className='w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-white' />
+            <label className='text-sm text-gray-600 ml-1'>Password</label>
           </div>
-          <div>
-            <input value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder=' ' type='password' required />
-            <label>Confirm Password</label>
+
+          <div className='mt-1'>
+            <input value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder=' ' type='password' required className='w-full px-3 py-2 mb-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-white' />
+            <label className='text-sm text-gray-600 ml-1'>Confirm Password</label>
           </div>
-          <span className='text-center text-xs'>People who use our service may have
-            <br></br>
-            uploaded your contact information to Instagram.
-            <br></br>
-            <Link to='/siginInlearnMore' className='text-blue-400 underline'>Learn More</Link>
+
+          <span className='text-center text-xs text-gray-600 block mt-1'>
+            People who use our service may have <br />
+            uploaded your contact information to Instagram. <br />
+            <Link to='/siginInlearnMore' className='text-cyan-700 underline hover:text-cyan-800'>Learn More</Link>
           </span>
-          <button type='submit' className='signup-btn shadow-xs box-content p-2 '>
-            {loading ? 'Processing...' : 'Sign up'}</button>
-          < section className='my-5 py-5'>
-            <p className='text-xs font-medium'>Have an account ?</p>
-            <Link to='/login' className='text-xs text-blue-500 font-bold'>Log in</Link>
+
+          <button type='submit' className='signup-btn w-full bg-cyan-700 hover:bg-cyan-800 text-white font-semibold mt-5 py-2 rounded-md transition shadow'>
+            {loading ? 'Processing...' : 'Sign up'}
+          </button>
+
+          <section className='my-5 py-5 text-center'>
+            <p className='text-xs font-medium text-gray-600'>Have an account?</p>
+            <Link to='/login' className='text-xs text-cyan-700 font-bold hover:text-cyan-800 transition'>Log in</Link>
           </section>
         </form>
       </div>
       <p className='text-xs md:mt-10 text-gray-500'>© 2025 GramHub from Meta</p>
-    </div >
+      {loading && <Loader size='lg' />}
+    </div>
   )
 }
 

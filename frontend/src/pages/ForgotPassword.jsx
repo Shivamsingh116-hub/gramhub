@@ -118,79 +118,85 @@ const ForgotPassword = () => {
   return (
     <div className='flex flex-col items-center min-w-full min-h-[100vh]'>
       <div className='relative max-w-md w-full'>
-        <form onSubmit={handleChangePassword} className='flex flex-col space-y-6 justify-center border-0 md:mt-15 mt-5 md:border-[1px] border-gray-300  w-full p-10 '>
-          <h2 className='font-semibold mt-8 text-[2rem] self-center'>ForgotPassword</h2>
+        <form onSubmit={handleChangePassword} className='flex flex-col space-y-6 justify-center border-0 md:mt-15 mt-5 md:border-[1px] border-cyan-100 w-full p-10 bg-transparent md:bg-white md:shadow-md'>
+          <h2 className='font-semibold mt-8 text-[2rem] self-center text-cyan-700'>ForgotPassword</h2>
 
           <div className='flex flex-col'>
-            <label className='text-sm font-medium mb-0.5'>Email</label>
+            <label className='text-sm font-medium mb-0.5 text-cyan-700'>Email</label>
             <input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className='text-sm bg-gray-100 border px-1.5 py-2 outline-0'
+              className='text-sm bg-blue-50 border border-cyan-200 px-1.5 py-2 outline-0 rounded'
               placeholder='Enter email'
               disabled={otpVerified}
             />
             {isVerifyEmailBtn && (
-              <button type="button" onClick={handleVerifyEmailBtn} className='text-blue-500 font-medium mt-1 text-sm self-end'>
+              <button type="button" onClick={handleVerifyEmailBtn} className='text-cyan-500 font-medium mt-1 text-sm self-end'>
                 Send OTP
               </button>
             )}
-            {otpStatusShow && <span className='text-green-600 mt-1 text-sm'>{otpStatusShow}</span>}
+            {otpStatusShow && <span className='text-cyan-600 mt-1 text-sm'>{otpStatusShow}</span>}
           </div>
 
           {!isVerifyEmailBtn && !otpVerified && (
             <div className='flex flex-col'>
-              <label className='text-sm font-medium mb-0.5'>OTP</label>
+              <label className='text-sm font-medium mb-0.5 text-cyan-700'>OTP</label>
               <input
                 type='text'
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
-                className='text-sm bg-gray-100 border px-1.5 py-2 outline-0'
+                className='text-sm bg-blue-50 border border-cyan-200 px-1.5 py-2 outline-0 rounded'
                 placeholder='Enter 6-digit OTP'
                 maxLength="6"
                 pattern="\d{6}"
                 inputMode="numeric"
               />
-              <button type="button" onClick={handleVerifyOtp} className='text-blue-500 font-medium mt-1 text-sm self-end'>
+              <button type="button" onClick={handleVerifyOtp} className='text-cyan-500 font-medium mt-1 text-sm self-end'>
                 Verify OTP
               </button>
             </div>
           )}
-          {showOtpStatement && <span className='text-blue-600 text-sm'>{showOtpStatement}</span>}
+          {showOtpStatement && <span className='text-cyan-600 text-sm'>{showOtpStatement}</span>}
 
           <div className='flex flex-col'>
-            <label className='text-sm font-medium mb-0.5'>New Password</label>
+            <label className='text-sm font-medium mb-0.5 text-cyan-700'>New Password</label>
             <input
               type='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className='text-sm bg-gray-100 border px-1.5 py-2 outline-0'
+              className='text-sm bg-blue-50 border border-cyan-200 px-1.5 py-2 outline-0 rounded'
               placeholder='Enter new password'
             />
           </div>
 
           <div className='flex flex-col'>
-            <label className='text-sm font-medium mb-0.5'>Confirm Password</label>
+            <label className='text-sm font-medium mb-0.5 text-cyan-700'>Confirm Password</label>
             <input
               type='password'
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className='text-sm bg-gray-100 border px-1.5 py-2 outline-0'
+              className='text-sm bg-blue-50 border border-cyan-200 px-1.5 py-2 outline-0 rounded'
               placeholder='Re-enter password'
             />
           </div>
 
-          <button type='submit' disabled={loading} className='px-3 mt-5 py-3 hover:cursor-pointer hover:text-black hover:bg-white border-2 font-semibold transition-all duration-100 bg-black text-white  '>
+          <button
+            type='submit'
+            disabled={loading}
+            className='px-3 mt-5 py-3 hover:cursor-pointer hover:text-cyan-700 hover:bg-white border-2 font-semibold transition-all duration-150 bg-cyan-700 text-white rounded'
+          >
             {loading ? 'Processing...' : 'Change Password'}
           </button>
-          <section className='my-5 py-5 border border-gray-300 flex flex-col items-center justify-center'>
-            <p className='text-xs font-medium text-gray-500'>Do you know password ?</p>
-            <Link to='/login' className='text-xs text-blue-500 font-bold'>Log in</Link>
+
+          <section className='my-5 py-5 border border-cyan-100 flex flex-col items-center justify-center bg-blue-50 rounded'>
+            <p className='text-xs font-medium text-gray-600'>Do you know password?</p>
+            <Link to='/login' className='text-xs text-cyan-500 font-bold'>Log in</Link>
           </section>
         </form>
-        {loading && <Loader />}
+
       </div>
       <p className='text-xs md:mt-10 text-gray-500'>© 2025 GramHub from Meta</p>
+      {loading && <Loader size='lg' />}
     </div>
   )
 }

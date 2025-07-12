@@ -52,58 +52,68 @@ const Navbar = () => {
 
 
     return (
-        <nav className="bg-white shadow-sm sticky top-0 z-40">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1">
-                <div className="flex justify-between h-16 items-center">
-                    {/* Logo */}
-                    <Link to="/" className="flex items-center gap-1 hover:cursor-pointer" style={{ color: "#333" }}>
-                        <InstagramIcon fontSize="inherit" style={{ fontSize: "30px" }} />
-                        <span className="text-xl ml-0.5 font-semibold self-end" >
-                            GramHub
-                        </span>
-                    </Link>
+       <nav className="bg-gradient-to-r from-white via-blue-50 to-cyan-100 shadow-sm sticky top-0 z-40">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1">
+    <div className="flex justify-between h-16 items-center">
+      
+      {/* Logo */}
+      <Link to="/" className="flex items-center gap-1 hover:cursor-pointer text-cyan-700">
+        <InstagramIcon fontSize="inherit" style={{ fontSize: "30px" }} />
+        <span className="text-xl ml-0.5 font-semibold self-end">
+          GramHub
+        </span>
+      </Link>
 
-                    {/* Navigation */}
-                    <div className='flex flex-row gap-6'>
-                        <ul className="navigation-item">
-                            {menuItems.map((item) => {
-                                return (
-                                    <li key={`${item.path}_navitem`} className='select-none cursor-pointer' id={item.title} >
-                                        <NavLink id={item.path} className={({ isActive }) => isActive ? 'active' : ''} to={item.path}>
-                                            {item.icon}
-                                            <span>{item.title}</span>
-                                        </NavLink>
-                                    </li>
-                                )
-                            })}
+      {/* Navigation */}
+      <div className='flex flex-row gap-6'>
+        <ul className="navigation-item text-cyan-600">
+          {menuItems.map((item) => (
+            <li key={`${item.path}_navitem`} className='select-none cursor-pointer' id={item.title}>
+              <NavLink
+                id={item.path}
+                className={({ isActive }) =>
+                  isActive
+                    ? 'text-cyan-700 font-semibold'
+                    : 'text-gray-600 hover:text-cyan-600 transition-colors duration-200'
+                }
+                to={item.path}
+              >
+                {item.icon}
+                <span>{item.title}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
 
-                        </ul>
-                        <div className='w-9 h-9 relative rounded-full overflow-hidden hover:cursor-pointer hover:scale-110 transition-scale duration-100 transition-normal'>
-                            <NavLink to='/profile'>
+        {/* Avatar */}
+        <div className='w-9 h-9 relative rounded-full overflow-hidden hover:cursor-pointer hover:scale-110 transition-transform duration-100'>
+          <NavLink to='/profile'>
+            {avatarURL && !imageError && (
+              <img
+                src={avatarURL}
+                alt="Avatar"
+                className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                onLoad={() => setImageLoaded(true)}
+                onError={() => setImageError(true)}
+              />
+            )}
 
-                                {avatarURL && !imageError && (
-                                    <img
-                                        src={avatarURL}
-                                        alt="Avatar"
-                                        className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-                                        onLoad={() => setImageLoaded(true)}
-                                        onError={() => setImageError(true)}
-                                    />
-                                )}
+            {/* Fallback Initials */}
+            {(!avatarURL || imageError) && (
+              <div className="w-full h-full flex items-center justify-center bg-cyan-100 text-cyan-700 text-xl font-semibold">
+                {currentUser?.username?.[0]?.toUpperCase() || 'U'}
+              </div>
+            )}
 
-                                {/* Fallback if image fails or not available */}
-                                {(!avatarURL || imageError) && (
-                                    <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600 text-xl font-semibold">
-                                        {currentUser?.username?.[0]?.toUpperCase() || 'U'}
-                                    </div>
-                                )}
-                                {!imageLoaded && avatarURL && !imageError && <Loader size='sm' />}
-                            </NavLink>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav >
+            {/* Loader if image is loading */}
+            {!imageLoaded && avatarURL && !imageError && <Loader size='sm' />}
+          </NavLink>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
     );
 };
 

@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Montserrat", system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
-
-  color-scheme: light dark;
-  color: black;
-  background-color: #fff;
-  font-family: "Montserrat", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Theme-aligned colors */
+  color-scheme: light;
+  color: #0e7490; /* Tailwind cyan-700 */
+  background-color: #ecfeff; /* Tailwind cyan-50 or adjust to match bg-gradient */
 }
