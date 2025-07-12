@@ -71,7 +71,7 @@ const Login = () => {
               required
               className='w-full border-b-2 border-cyan-300 bg-transparent text-gray-800 placeholder-transparent focus:outline-none focus:border-cyan-600 peer py-2'
             />
-            <label className='text-gray-500 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2.5 transition-all'>Username/Email</label>
+            <label className=' text-gray-500 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2.5 transition-all'>Username/Email</label>
           </div>
 
           <div className='mt-6'>

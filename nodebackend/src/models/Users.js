@@ -31,6 +31,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
+
     followers: [
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -42,7 +43,10 @@ const UserSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         }
-    ]
+    ],
+    isAuthenticated: {
+        type: Boolean, default: true
+    }
 }, { timestamps: true })
 const userModel = mongoose.model('User', UserSchema)
 module.exports = userModel
