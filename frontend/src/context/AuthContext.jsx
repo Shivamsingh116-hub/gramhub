@@ -40,7 +40,8 @@ const AuthContextProvider = ({ children }) => {
             setLoadingCurrentUser(false)
         }
     }, [apiUrl])
-    const fetchRandomPost = async (lastCreatedAt = null) => {
+    const fetchRandomPost = async (lastCreatedAt = null, prepend = false) => {
+        console.log('hello')
         setLoading(true);
         try {
             const { data: res } = await axiosInstance.get(`/get/random-post`, {
@@ -53,7 +54,7 @@ const AuthContextProvider = ({ children }) => {
             setFetchPost((prev) => {
                 const existingIds = new Set(prev.map(post => post._id));
                 const newPosts = res.filter(post => !existingIds.has(post._id));
-                return [...prev, ...newPosts];
+                return prepend ? [...newPosts, ...prev] : [...prev, ...newPosts];
             });
 
             if (res.length < 10) setHasMore(false);
@@ -71,7 +72,7 @@ const AuthContextProvider = ({ children }) => {
         fetchRandomPost()
         const interval = setInterval(() => {
             fetchRandomPost();
-        }, 300000); 
+        }, 300000);
 
         return () => clearInterval(interval);
     }, [currentUser])

@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const Loader = ({ size = 'md' }) => {
+    useEffect(()=>{
+        document.body.style.overflow='hidden'
+        return ()=>document.body.style.overflow=''
+    })
     const sizeClasses = {
         sm: "w-5 h-5",
         md: "w-10 h-10",

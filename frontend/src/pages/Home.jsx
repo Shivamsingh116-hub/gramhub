@@ -4,8 +4,8 @@ import axiosInstance from '../utils/axiosInstance';
 import { AuthContext } from '../context/AuthContext';
 
 const Home = () => {
-  const { fetchPost, loading, fetchRandomPost,hasMore, setHasMore } = useContext(AuthContext);
-
+  const { fetchPost, loading, fetchRandomPost,hasMore } = useContext(AuthContext);
+console.log(fetchPost)
   
 
 

@@ -15,7 +15,7 @@ const Create = () => {
   const fileInputRef = useRef(null)
   const navigate = useNavigate()
   const { setModalMessage, setPopupModal, setRecentPostUploadData } = useContext(Context)
-  const{fetchRandomPost}=useContext(AuthContext)
+  const { fetchRandomPost } = useContext(AuthContext)
 
   useEffect(() => {
     return () => {
@@ -111,7 +111,7 @@ const Create = () => {
       setRecentPostUploadData(postData)
       setModalMessage(message)
       setPopupModal(true)
-      await fetchRandomPost()
+      fetchRandomPost(null, true)
       navigate('/')
     } catch (err) {
       console.error(err)
