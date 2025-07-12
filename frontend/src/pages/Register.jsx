@@ -20,7 +20,8 @@ const Register = () => {
   const [otpError, setOtpError] = useState('')
   const [showSignUpVerifyBtn, setShowSignUpVerifyBtn] = useState(false)
   const [otpStatusShow, setOtpStatusShow] = useState('')
-  const { setModalMessage, setPopupModal, loading, setLoading } = useContext(Context)
+  const { setModalMessage, setPopupModal } = useContext(Context)
+  const [loading, setLoading] = useState(false)
   const { fetchCurrentUserData } = useContext(AuthContext)
   const navigate = useNavigate()
   const validateUsername = (userName) => {
