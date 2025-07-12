@@ -10,7 +10,8 @@ import { useNavigate } from 'react-router-dom'
 const EditProfile = () => {
   const { currentUser, setCurrentUser } = useContext(AuthContext)
   const [isChecked, setIsChecked] = useState(false)
-  const { loading, setLoading, setModalMessage, setPopupModal } = useContext(Context)
+  const {  setModalMessage, setPopupModal } = useContext(Context)
+  const [loading, setLoading]=useState(false)
   const navigate = useNavigate()
 
   const [formData, setFormData] = useState({

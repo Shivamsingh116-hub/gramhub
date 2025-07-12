@@ -3,6 +3,7 @@ import { Context } from '../context/Context'
 import axiosInstance from '../utils/axiosInstance'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../context/AuthContext'
 
 const Create = () => {
   const [post, setPost] = useState(null)
@@ -14,6 +15,7 @@ const Create = () => {
   const fileInputRef = useRef(null)
   const navigate = useNavigate()
   const { setModalMessage, setPopupModal, setRecentPostUploadData } = useContext(Context)
+  const{fetchRandomPost}=useContext(AuthContext)
 
   useEffect(() => {
     return () => {
@@ -109,6 +111,7 @@ const Create = () => {
       setRecentPostUploadData(postData)
       setModalMessage(message)
       setPopupModal(true)
+      await fetchRandomPost()
       navigate('/')
     } catch (err) {
       console.error(err)
