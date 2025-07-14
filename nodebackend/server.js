@@ -10,6 +10,7 @@ const router = require('./src/routes/authRoutes')
 const uploadRouter = require('./src/routes/uploadRoutes')
 const { getRouter } = require('./src/routes/getRoutes')
 const { connected } = require('process')
+const { updateRouter } = require('./src/routes/updateRoutes')
 app.use(CORS({
     origin: [process.env.LOCALHOST_URL, process.env.FRONTEND_URL,],
     credentials: true
@@ -19,6 +20,7 @@ app.use(express.json())
 app.use("/api/auth", router)
 app.use("/api/upload", uploadRouter)
 app.use('/api/get', getRouter)
+app.use('/api/update',updateRouter)
 app.get('/', (req, res) => {
     res.send("WORKING SERVER")
 })

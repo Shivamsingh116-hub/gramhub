@@ -1,6 +1,10 @@
 const express = require('express')
 const verifyToken = require('../middleware/auth')
 const { getRandomPost } = require('../controllers/postController/getRandomPost')
+const { getProfileShowData } = require('../controllers/profileController/getProfileShow')
+const { getCommentOrLike } = require('../controllers/postController/getCommentOrLike')
 const getRouter = express.Router()
 getRouter.get('/random-post', verifyToken, getRandomPost)
+getRouter.get('/profile-show/:username',getProfileShowData)
+getRouter.get('/fetch-comment-or-like/:postId',verifyToken,getCommentOrLike)
 module.exports = { getRouter }

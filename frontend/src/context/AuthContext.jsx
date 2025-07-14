@@ -41,7 +41,6 @@ const AuthContextProvider = ({ children }) => {
         }
     }, [apiUrl])
     const fetchRandomPost = async (lastCreatedAt = null, prepend = false) => {
-        console.log('hello')
         setLoading(true);
         try {
             const { data: res } = await axiosInstance.get(`/get/random-post`, {

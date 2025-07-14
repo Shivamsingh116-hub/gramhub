@@ -19,6 +19,7 @@ import ScrollToTop from './components/ScrollToTop'
 import Profile from './components/profile/Profile'
 import AvatarUploader from './components/profile/AvtarUploader'
 import EditProfile from './pages/profile/EditProfile'
+import ProfileShow from './pages/profile/ProfileShow'
 
 const App = () => {
 
@@ -41,6 +42,8 @@ const App = () => {
           <Route path='*' element={<NoMatch />} />
         </Route>
         <Route path='/edit-profile' element={<PrivateRoute><EditProfile /></PrivateRoute>} />
+        <Route path='/profile-show/:username' element={<PrivateRoute><ProfileShow /></PrivateRoute>} />
+
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />

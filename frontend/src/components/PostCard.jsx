@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import Loader from './Loader';
+import { useNavigate } from 'react-router-dom';
+import LikeBtn from '../utils/buttons/LikeBtn';
+import CommentBtn from '../utils/buttons/CommentBtn';
 
 const PostCard = ({ postData }) => {
     const [postImageLoaded, setPostImageLoaded] = useState(false);
     const [postImageError, setPostImageError] = useState(false);
     const [avatarError, setAvatarError] = useState(false);
+    const [postComments, setPostComments] = useState(postData.comments)
     const user = postData?.userId || {};
-    const comments = postData?.comments || [];
-    const likes = postData?.likes || [];
     const avatarURL = avatarError ? '/default-profile.png' : user?.avatarURL || '/default-profile.png';
     const timestamp = postData.createdAt;
+    const navigate = useNavigate()
     const readableDate = new Date(timestamp).toLocaleString('en-US', {
         year: 'numeric',
         month: 'short',
@@ -18,11 +21,12 @@ const PostCard = ({ postData }) => {
         minute: '2-digit',
         hour12: true  // ensures AM/PM format
     });
+  
 
     return (
         <div className="max-w-md mx-auto bg-white md:rounded-xl md:shadow-sm border border-blue-50 overflow-hidden mb-6">
             {/* Post Header */}
-            <div className="flex items-center p-4 bg-blue-50">
+            <div role='button' onClick={() => navigate(`/profile-show/${user.username}`)} className="hover:cursor-pointer flex items-center p-4 bg-blue-50">
                 <img
                     src={avatarURL}
                     alt="User Avatar"
@@ -64,30 +68,14 @@ const PostCard = ({ postData }) => {
                 {postData?.details?.trim() && (
                     <p className="text-sm mb-2 text-cyan-700">{postData.details}</p>
                 )}
-                <p className="text-sm font-semibold text-cyan-800">
-                    {likes.length} like{likes.length !== 1 ? 's' : ''}
-                </p>
+                <LikeBtn likes={postData.likes} postId={postData._id} />
+                <CommentBtn postComments={postComments} setPostComments={setPostComments} postId={postData._id} />
             </div>
 
             {/* Comments */}
 
-            {comments.length > 0 && (
-                <div className="px-4 pb-4 bg-white">
-                    {comments.slice(0, 2).map((comment, index) => (
-                        <div key={index} className="text-sm text-cyan-700">
-                            <span className="font-medium text-cyan-800">
-                                {comment?.userId?.username || "Anonymous"}:
-                            </span>{" "}
-                            <span>{comment?.text || ""}</span>
-                        </div>
-                    ))}
-                    {comments.length > 2 && (
-                        <p className="text-cyan-600 text-sm mt-1 cursor-pointer hover:underline">
-                            View all {comments.length} comments
-                        </p>
-                    )}
-                </div>
-            )}
+
+
 
             <div className="px-4 pb-4 bg-white">
                 <p className='text-xs'>{readableDate}</p>
