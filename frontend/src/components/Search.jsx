@@ -47,7 +47,7 @@ const Search = () => {
   return (
     <div className="w-full flex flex-col items-center mt-4">
       {/* Search Form */}
-      <form onSubmit={handleSubmit} className="flex items-center w-full max-w-md">
+      <form onSubmit={handleSubmit} className="flex items-center w-full max-w-md px-3">
         <input
           type="text"
           disabled={loading}
