@@ -24,6 +24,20 @@ const Create = () => {
       }
     }
   }, [postURL])
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (isUploading) {
+        e.preventDefault();
+        e.returnValue = ''; // Required for Chrome to trigger the alert
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isUploading]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0]
@@ -35,7 +49,12 @@ const Create = () => {
 
     const isImage = file.type.startsWith('image/')
     const isVideo = file.type.startsWith('video/')
-    if (!isImage && !isVideo) {
+    if (isVideo) {
+      resetUpload()
+      setImageError('Currently video uploading feature not available')
+      return
+    }
+    if (!isImage) {
       resetUpload()
       setImageError('Please select an image or video file')
       return
@@ -81,6 +100,7 @@ const Create = () => {
 
     setIsUploading(true)
     try {
+
       const { data: sigData } = await axiosInstance.post('/upload/get-post-upload-signature', {
         folder,
         contentType: post.type,
@@ -141,7 +161,7 @@ const Create = () => {
             border border-cyan-600 hover:border-cyan-700 transition-all duration-150 px-5 py-2 rounded-md font-medium text-sm"
           >
             {post ? 'Change File' : 'Upload Media'}
-            <input id="postUpload" ref={fileInputRef} type="file" onChange={handleFileChange} className="hidden" />
+            <input disabled={isUploading} id="postUpload" ref={fileInputRef} type="file" onChange={handleFileChange} className="hidden" />
           </label>
 
           {postURL && post?.type.startsWith('image/') && (

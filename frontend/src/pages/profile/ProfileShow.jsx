@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosInstance';
 import PostShowCard from '../../components/postShow/PostShowCard';
+import { AuthContext } from '../../context/AuthContext';
+import { FollowBtnFunction } from '../../utils/buttons/FollowBtnFunction';
+import { Context } from '../../context/Context';
+import FollowersShow from '../../components/small/FollowersShow';
 
 const ProfileShow = () => {
     const { username } = useParams();
@@ -9,6 +13,11 @@ const ProfileShow = () => {
     const [loading, setLoading] = useState(true);
     const [isPostShow, setIsPostShow] = useState(false)
     const [postShowData, setPostShowData] = useState(null)
+    const { currentUser } = useContext(AuthContext)
+    const { setPopupModal, setModalMessage } = useContext(Context)
+    const [isFollowComponent, setIsFollowComponent] = useState(false)
+    const [componentType, setComponentType] = useState(null)
+    const [isFollow, setIsFollow] = useState(profileData?.user?.followers.includes(currentUser?._id))
     useEffect(() => {
         const fetchProfileShowData = async () => {
             try {
@@ -23,6 +32,45 @@ const ProfileShow = () => {
 
         fetchProfileShowData();
     }, [username]);
+    // const [isFollow,setIsFollow]=useState(profileData.followers.includes(currentUser.userId))
+
+
+    useEffect(() => {
+        if (profileData && currentUser) {
+            const followed = profileData.user.followers.includes(currentUser._id);
+            setIsFollow(followed);
+        }
+    }, [profileData, currentUser]);
+    const handleFollowToggle = async () => {
+        try {
+            const operation = isFollow ? 'pull' : 'addToSet';
+            const res = await FollowBtnFunction(profileData.user._id, operation);
+
+            // Toggle the isFollow state manually
+            setIsFollow((prev) => !prev);
+
+            // Optionally, update profileData followers count
+            setProfileData((prevData) => {
+                if (!prevData) return prevData;
+
+                const updatedFollowers = isFollow
+                    ? prevData.user.followers.filter((id) => id !== currentUser._id)
+                    : [...prevData.user.followers, currentUser._id];
+
+                return {
+                    ...prevData,
+                    user: {
+                        ...prevData.user,
+                        followers: updatedFollowers,
+                    },
+                };
+            });
+        } catch (error) {
+            console.error("Failed to follow/unfollow:", error);
+            setModalMessage("Action failed. Try again.");
+            setPopupModal(true);
+        }
+    };
 
     if (loading) {
         return (
@@ -42,30 +90,85 @@ const ProfileShow = () => {
     const handlePostShow = (current_post) => {
         setIsPostShow(true)
         setPostShowData(current_post)
-        console.log(current_post)
+     
     }
     const { user, posts } = profileData;
-
+    console.log(profileData)
     return (
         <div className="max-w-5xl mx-auto p-4">
             {/* === Profile Header === */}
             <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 border-b pb-6 mb-8">
-                <img
-                    src={user.avatarURL}
-                    alt={`${user.username}'s profile picture`}
-                    className="w-32 h-32 sm:w-36 sm:h-36 rounded-full object-cover border-2 border-gray-300 shadow"
-                />
-                <div className="text-center sm:text-left">
+                {user.avatarURL ? (
+                    <img
+                        src={user.avatarURL}
+                        alt={`${user.username}'s profile picture`}
+                        className="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover mt-4 border-2 sm:self-start border-gray-300 shadow"
+                        onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.style.display = 'none';
+                            // Optional: You could trigger a state update to render fallback
+                        }}
+                    />
+                ) : (
+                    <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gray-300 mt-4 border-2 sm:self-start border-gray-300 shadow flex items-center justify-center text-4xl font-semibold text-white uppercase">
+                        {user.username?.charAt(0) || '?'}
+                    </div>
+                )}
+
+                <div className="text-center sm:text-left flex flex-col">
                     <h2 className="text-3xl font-bold">@{user.username}</h2>
-                    <p className="text-sm text-gray-600">
-                        {user.name || 'No name provided'}
-                    </p>
+                    {user.name && <p className="text-sm text-gray-600">
+                        {user.name}
+                    </p>}
+                    <div className='flex gap-6 text-xs mt-2 self-center sm:self-start'>
+                        <button>
+                            <span>{posts?.length || '0'}</span>
+                            <p>{posts?.length === 1 ? 'post' : 'posts'}</p>
+                        </button>
+                        <button onClick={() => {
+                            setIsFollowComponent(true)
+                            setComponentType('followers')
+                        }}>
+                            <span>{user.followers?.length || '0'}</span>
+                            <p>{user.followers?.length === 1 ? 'follower' : 'followers'}</p>
+                        </button>
+                        <button onClick={() => {
+                            setIsFollowComponent(true)
+                            setComponentType('following')
+                        }}>
+                            <span>{user.following?.length || '0'}</span>
+                            <p>{user.following?.length === 1 ? 'following' : 'followings'}</p>
+                        </button>
+                        {isFollowComponent && <FollowersShow type={componentType} data={profileData.user} setIsComponent={setIsFollowComponent} />}
+                    </div>
                     {user.gender && (
                         <p className="text-sm mt-0.5 text-gray-500">Gender: {user.gender}</p>
                     )}
-                    <p className="mt-3 whitespace-pre-wrap text-gray-700 text-sm">
-                        {user.bio || 'No bio available'}
-                    </p>
+                    {user.bio && <p className="mt-1 whitespace-pre-wrap text-gray-700 text-sm">
+                        {user.bio}
+                    </p>}
+                    {profileData?.user?._id !== currentUser?._id && (
+                        <div className="flex flex-row gap-4 mt-2">
+                            <button
+                                className="flex-1 py-2.5 bg-cyan-600 hover:bg-cyan-700
+         text-white text-xs font-medium rounded-md transition duration-150"
+                                type="button"
+                                onClick={handleFollowToggle}
+                            >
+                                {isFollow ? 'Following' : 'Follow'}
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setModalMessage('Currently not available!');
+                                    setPopupModal(true);
+                                }}
+                                className="flex-1 py-2.5 bg-white text-cyan-700 border border-cyan-300 hover:bg-cyan-600 hover:text-white text-xs font-medium rounded-md transition duration-150"
+                            >
+                                Message
+                            </button>
+                        </div>
+                    )}
+
                     <p className="text-xs text-gray-400 mt-1">
                         Joined on{' '}
                         {new Date(user.createdAt).toLocaleDateString('en-US', {
@@ -76,8 +179,7 @@ const ProfileShow = () => {
                 </div>
             </div>
 
-            {/* === Posts Grid === */}
-            <h3 className="text-xl font-semibold mb-4">Posts ({posts.length})</h3>
+
 
             {posts.length === 0 ? (
                 <p className="text-gray-500">No posts yet.</p>
@@ -108,7 +210,7 @@ const ProfileShow = () => {
                     ))}
                 </div>
             )}
-            {isPostShow && <PostShowCard  postData={ postShowData} setIsPostShow={setIsPostShow} />}
+            {isPostShow && <PostShowCard postData={postShowData} setIsPostShow={setIsPostShow} />}
         </div>
     );
 };

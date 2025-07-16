@@ -3,10 +3,13 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import LikeBtn from '../../utils/buttons/LikeBtn';
 import CommentBtn from '../../utils/buttons/CommentBtn';
 import useClickOutsideMulti from '../../utils/reuseHooks/UseClickOutside';
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import axiosInstance from '../../utils/axiosInstance';
+import Loader from '../Loader';
 const PostShowCard = ({ postData, setIsPostShow }) => {
     const [postComments, setPostComments] = useState(postData.comments)
     const containerRef = useRef(null)
+    const [loading, setLoading] = useState(false)
     if (!postData) return null;
     const {
         details,
@@ -19,8 +22,24 @@ const PostShowCard = ({ postData, setIsPostShow }) => {
     } = postData;
     const formattedDate = new Date(createdAt).toLocaleString();
     useClickOutsideMulti([containerRef], () => setIsPostShow(false))
+    const handleDelete = async () => {
+
+        setLoading(true)
+        try {
+            await axiosInstance.delete(`/delete/post/${_id}`);
+            window.location.reload()
+            setIsPostShow(false);
+
+        } catch (error) {
+            console.error('Error deleting post:', error);
+            alert("Failed to delete the post. Please try again.");
+        } finally {
+            setLoading(false)
+        }
+    };
+
     return (
-        <div  className='fixed flex justify-center items-center inset-0 bg-gradient-to-br from-white via-blue-50 to-cyan-100 z-50'>
+        <div className='fixed flex justify-center items-center inset-0 bg-gradient-to-br from-white via-blue-50 to-cyan-100 z-50'>
             <button
                 className='fixed top-6 right-6 md:top-6 md:right-10 hover:cursor-pointer text-gray-600 hover:text-red-500 text-xl font-bold'
                 onClick={() => setIsPostShow(false)}
@@ -48,6 +67,15 @@ const PostShowCard = ({ postData, setIsPostShow }) => {
                     <CommentBtn postComments={postComments} setPostComments={setPostComments} postId={postData._id} />
                     <div className='mt-2 self-end  text-xs text-gray-500'>
                         <span>Posted on: {formattedDate}</span>
+                        <button
+                            onClick={handleDelete}
+                            className="relative ml-2 hover:text-red-600 transition"
+                            title="Delete Post"
+                        >
+                            <DeleteIcon />
+                            {loading && <Loader size='sm' />}
+                        </button>
+
                     </div>
 
                 </div>

@@ -31,11 +31,15 @@ const CommentAndLikeShow = ({ postId, setIsComponent, type }) => {
 
     if (!type) return null;
 
+    useEffect(() => {
+        document.body.style.overflow = 'hidden'
 
+        return () => document.body.style.overflow = ''
+    }, [])
     return (
         <div
             ref={currentRef}
-            className="fixed bottom-0 left-0 h-[70%] w-full bg-white z-40 
+            className="fixed bottom-0 left-0 md:h-[50%] h-[56%] w-full bg-white z-40 
                        rounded-tl-3xl rounded-tr-3xl p-4 shadow-lg flex flex-col"
         >
             {/* Close Button */}
@@ -62,41 +66,41 @@ const CommentAndLikeShow = ({ postId, setIsComponent, type }) => {
                     <ul className="space-y-2">
                         {type === 'like'
                             ? [...data].reverse().map((like, index) => (
-                                  <li
-                                      key={index}
-                                      className="flex items-center space-x-2 border-b pb-1"
-                                  >
-                                      <img
-                                          src={like.avatarURL || '/default-avatar.png'}
-                                          alt="avatar"
-                                          className="w-8 h-8 rounded-full object-cover"
-                                      />
-                                      <span className="text-gray-700">{like.username}</span>
-                                  </li>
-                              ))
+                                <li
+                                    key={index}
+                                    className="flex items-center space-x-2 border-b pb-1"
+                                >
+                                    <img
+                                        src={like.avatarURL || '/default-avatar.png'}
+                                        alt="avatar"
+                                        className="w-8 h-8 rounded-full object-cover"
+                                    />
+                                    <span className="text-gray-700">{like.username}</span>
+                                </li>
+                            ))
                             : [...data].reverse().map((comment, index) => (
-                                  <li
-                                      key={index}
-                                      className="flex items-start space-x-3 border p-2 rounded-md bg-gray-50"
-                                  >
-                                      <img
-                                          src={
-                                              comment.userId.avatarURL ||
-                                              '/default-avatar.png'
-                                          }
-                                          alt={`${comment.userId.username}'s avatar`}
-                                          className="w-8 h-8 rounded-full object-cover"
-                                      />
-                                      <div>
-                                          <p className="text-sm font-semibold text-gray-800">
-                                              {comment.userId.username}
-                                          </p>
-                                          <p className="text-sm text-gray-700">
-                                              {comment.text}
-                                          </p>
-                                      </div>
-                                  </li>
-                              ))}
+                                <li
+                                    key={index}
+                                    className="flex items-start space-x-3 border p-2 rounded-md bg-gray-50"
+                                >
+                                    <img
+                                        src={
+                                            comment.userId.avatarURL ||
+                                            '/default-avatar.png'
+                                        }
+                                        alt={`${comment.userId.username}'s avatar`}
+                                        className="w-8 h-8 rounded-full object-cover"
+                                    />
+                                    <div>
+                                        <p className="text-sm font-semibold text-gray-800">
+                                            {comment.userId.username}
+                                        </p>
+                                        <p className="text-sm text-gray-700">
+                                            {comment.text}
+                                        </p>
+                                    </div>
+                                </li>
+                            ))}
                     </ul>
                 )}
             </div>
