@@ -24,21 +24,7 @@ const Create = () => {
       }
     }
   }, [postURL])
-  useEffect(() => {
-    const handleBeforeUnload = (e) => {
-      if (isUploading) {
-        e.preventDefault();
-        e.returnValue = ''; // Required for Chrome to trigger the alert
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [isUploading]);
-
+  
   const handleFileChange = (e) => {
     const file = e.target.files[0]
     if (!file) {

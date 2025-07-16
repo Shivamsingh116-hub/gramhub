@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import LikeBtn from '../../utils/buttons/LikeBtn';
 import CommentBtn from '../../utils/buttons/CommentBtn';
@@ -6,9 +6,11 @@ import useClickOutsideMulti from '../../utils/reuseHooks/UseClickOutside';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axiosInstance from '../../utils/axiosInstance';
 import Loader from '../Loader';
+import { AuthContext } from '../../context/AuthContext';
 const PostShowCard = ({ postData, setIsPostShow }) => {
     const [postComments, setPostComments] = useState(postData.comments)
     const containerRef = useRef(null)
+    const { currentUser } = useContext(AuthContext)
     const [loading, setLoading] = useState(false)
     if (!postData) return null;
     const {
@@ -67,14 +69,14 @@ const PostShowCard = ({ postData, setIsPostShow }) => {
                     <CommentBtn postComments={postComments} setPostComments={setPostComments} postId={postData._id} />
                     <div className='mt-2 self-end  text-xs text-gray-500'>
                         <span>Posted on: {formattedDate}</span>
-                        <button
+                        {currentUser?._id === userId && <button
                             onClick={handleDelete}
-                            className="relative ml-2 hover:text-red-600 transition"
+                            className={`relative ml-2 ${loading ? "bg-transparent" : ''} hover:text-red-600 transition`}
                             title="Delete Post"
                         >
                             <DeleteIcon />
                             {loading && <Loader size='sm' />}
-                        </button>
+                        </button>}
 
                     </div>
 

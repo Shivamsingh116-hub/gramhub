@@ -21,18 +21,24 @@ const PostCard = ({ postData }) => {
         minute: '2-digit',
         hour12: true  // ensures AM/PM format
     });
-  
+
 
     return (
         <div className="max-w-md mx-auto bg-white md:rounded-xl md:shadow-sm border border-blue-50 overflow-hidden mb-6">
             {/* Post Header */}
             <div role='button' onClick={() => navigate(`/profile-show/${user.username}`)} className="hover:cursor-pointer flex items-center p-4 bg-blue-50">
-                <img
-                    src={avatarURL}
-                    alt="User Avatar"
-                    className="w-10 h-10 rounded-full object-cover border border-cyan-200"
-                    onError={() => setAvatarError(true)}
-                />
+                {!avatarError ? (
+                    <img
+                        src={avatarURL}
+                        alt="User Avatar"
+                        className="w-10 h-10 rounded-full object-cover border border-cyan-200"
+                        onError={() => setAvatarError(true)}
+                    />
+                ) : (
+                    <div className="w-10 h-10 rounded-full bg-cyan-200 text-white flex items-center justify-center font-bold border border-cyan-200">
+                        {user?.username?.charAt(0).toUpperCase() || "U"}
+                    </div>
+                )}
                 <span className="ml-4 font-semibold text-cyan-700">{user?.username || "Unknown User"}</span>
             </div>
 
