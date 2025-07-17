@@ -19,6 +19,17 @@ const Chat = () => {
         return () => { socket.disconnect() }
     }, [])
     console.log(recipient)
+    useEffect(() => {
+        socket.on('receive_message', (data) => {
+            if (data.from === recipient._id) {
+                setChat((prev) => [...prev, { ...data, sender: 'other' }])
+            }
+        })
+
+        return () => {
+            socket.off('receive_message')
+        }
+    }, [recipient])
     const handleSend = () => {
         if (message.trim() === '' || !user) {
             return
