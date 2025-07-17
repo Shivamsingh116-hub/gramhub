@@ -20,6 +20,7 @@ import Profile from './components/profile/Profile'
 import AvatarUploader from './components/profile/AvtarUploader'
 import EditProfile from './pages/profile/EditProfile'
 import ProfileShow from './pages/profile/ProfileShow'
+import Chat from './pages/Chat'
 
 const App = () => {
 
@@ -39,6 +40,7 @@ const App = () => {
           <Route path='/notification' element={<PrivateRoute><Notification /></PrivateRoute>} />
           <Route path='/create' element={<PrivateRoute><Create /></PrivateRoute>} />
           <Route path='/avatar-uploader' element={<PrivateRoute><AvatarUploader /></PrivateRoute>} />
+          <Route path='/chat/:data' element={<PrivateRoute><Chat /></PrivateRoute>} />
           <Route path='*' element={<NoMatch />} />
         </Route>
         <Route path='/edit-profile' element={<PrivateRoute><EditProfile /></PrivateRoute>} />

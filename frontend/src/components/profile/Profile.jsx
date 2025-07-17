@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import Loader from '../Loader';
 import FollowersShow from '../small/FollowersShow';
 import AllPostShow from '../postShow/AllPostShow';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Profile = () => {
   const { currentUser, setCurrentUser } = useContext(AuthContext);
@@ -23,7 +24,6 @@ const Profile = () => {
     if (!avatarURL) return;
     setImageLoaded(false);
     setImageError(false);
-
     const img = new Image();
     img.src = avatarURL;
 
@@ -51,15 +51,22 @@ const Profile = () => {
   return (
     <>
       {/* Profile Card */}
-      <div className="max-w-md relative mx-auto p-6 mt-10 md:bg-white bg-transparent md:shadow-xl md:rounded-2xl md:border border-blue-100">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="max-w-md relative mx-auto p-6 mt-10 bg-white shadow-xl rounded-2xl border border-blue-100"
+      >
         <h2 className="text-3xl font-semibold text-cyan-700 mb-4 text-center">ᴘʀᴏꜰɪʟᴇ</h2>
 
         <div className="flex px-5 flex-col gap-4">
           {/* Avatar */}
-          <div
-            tabIndex={0}
+          <motion.div
+            whileHover={{ scale: 1.05, boxShadow: '0px 4px 12px rgba(0,0,0,0.15)' }}
             className="self-center relative w-32 h-32 overflow-hidden rounded-full shadow-md hover:ring-2 ring-cyan-300 transition-all duration-200 cursor-pointer"
             role="button"
+            tabIndex={0}
             onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && navigate('/avatar-uploader')}
             onClick={() => navigate('/avatar-uploader')}
           >
@@ -67,7 +74,9 @@ const Profile = () => {
               <img
                 src={avatarURL}
                 alt="Avatar"
-                className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                className={`w-full h-full object-cover transition-opacity duration-300 ${
+                  imageLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
                 onLoad={() => setImageLoaded(true)}
                 onError={() => setImageError(true)}
               />
@@ -77,25 +86,28 @@ const Profile = () => {
               </div>
             )}
             {!imageLoaded && avatarURL && !imageError && <Loader size="sm" />}
-          </div>
+          </motion.div>
 
           {/* Followers/Following */}
-          <div className='flex gap-6 text-xs mt-2 self-center'>
-            <button onClick={() => {
-              setIsFollowComponent(true);
-              setComponentType('followers');
-            }}>
+          <div className="flex gap-6 text-xs mt-2 self-center">
+            <button onClick={() => { setIsFollowComponent(true); setComponentType('followers'); }}>
               <span>{currentUser.followers?.length || '0'}</span>
               <p>{currentUser.followers?.length === 1 ? 'follower' : 'followers'}</p>
             </button>
-            <button onClick={() => {
-              setIsFollowComponent(true);
-              setComponentType('following');
-            }}>
+            <button onClick={() => { setIsFollowComponent(true); setComponentType('following'); }}>
               <span>{currentUser.following?.length || '0'}</span>
               <p>{currentUser.following?.length === 1 ? 'following' : 'followings'}</p>
             </button>
-            {isFollowComponent && <FollowersShow type={componentType} data={currentUser} setIsComponent={setIsFollowComponent} />}
+            <AnimatePresence>
+              {isFollowComponent && (
+                <FollowersShow
+                  key="followers-show"
+                  type={componentType}
+                  data={currentUser}
+                  setIsComponent={setIsFollowComponent}
+                />
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Info */}
@@ -129,12 +141,24 @@ const Profile = () => {
           {/* Logout */}
           <LogoutButton setCurrentUser={setCurrentUser} />
         </div>
-      </div>
+      </motion.div>
 
-      {/* ⬇️ All Posts Section Outside the Card */}
+      {/* All Posts Section */}
       <div className="max-w-full mx-auto px-4 mt-8 mb-10">
-        <h3 className="text-2xl font-semibold text-cyan-700 mb-4 text-center">Your Posts</h3>
-        <AllPostShow userId={currentUser._id} />
+        <h3 className="text-2xl font-semibold text-cyan-700 mb-4 text-center">
+          Your Posts
+        </h3>
+        {/* Animate the posts container */}
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: { transition: { staggerChildren: 0.1 } },
+          }}
+          className="overflow-hidden"
+        >
+          <AllPostShow userId={currentUser._id} />
+        </motion.div>
       </div>
     </>
   );

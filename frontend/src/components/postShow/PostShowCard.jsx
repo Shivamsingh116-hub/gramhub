@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import LikeBtn from '../../utils/buttons/LikeBtn';
 import CommentBtn from '../../utils/buttons/CommentBtn';
@@ -22,6 +22,10 @@ const PostShowCard = ({ postData, setIsPostShow }) => {
         likes = [],
         comments = [],
     } = postData;
+    useEffect(() => {
+        document.body.style.overflow = 'hidden'
+        return () => document.body.style.overflow = ''
+    })
     const formattedDate = new Date(createdAt).toLocaleString();
     useClickOutsideMulti([containerRef], () => setIsPostShow(false))
     const handleDelete = async () => {
@@ -73,6 +77,7 @@ const PostShowCard = ({ postData, setIsPostShow }) => {
                             onClick={handleDelete}
                             className={`relative ml-2 ${loading ? "bg-transparent" : ''} hover:text-red-600 transition`}
                             title="Delete Post"
+                            disabled={loading}
                         >
                             <DeleteIcon />
                             {loading && <Loader size='sm' />}
