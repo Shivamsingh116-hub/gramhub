@@ -25,7 +25,7 @@ const PostCard = ({ postData }) => {
   });
 
   return (
-    <div className="max-w-md mx-auto bg-white md:rounded-xl md:shadow-sm border border-blue-50 overflow-hidden mb-6">
+    <div className="max-w-md mx-auto bg-white md:rounded-xl md:shadow-sm border border-blue-50 overflow-hidden">
       
       {/* ✅ Post Header */}
       <div

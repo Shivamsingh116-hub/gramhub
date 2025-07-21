@@ -6,12 +6,13 @@ import { Context } from '../../context/Context'
 import Loader from '../../components/Loader'
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import { useNavigate } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const EditProfile = () => {
   const { currentUser, setCurrentUser } = useContext(AuthContext)
   const [isChecked, setIsChecked] = useState(false)
-  const {  setModalMessage, setPopupModal } = useContext(Context)
-  const [loading, setLoading]=useState(false)
+  const { setModalMessage, setPopupModal } = useContext(Context)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
@@ -52,20 +53,26 @@ const EditProfile = () => {
   }
 
   return (
-    <div className="relative edit-profile w-full min-h-screen flex flex-col pt-16 items-center  bg-gradient-to-br from-white via-blue-50 to-cyan-100">
-
+    <div className="relative edit-profile w-full min-h-screen flex flex-col pt-16 items-center bg-gradient-to-br from-white via-blue-50 to-cyan-100">
       {/* Close Button */}
-      <button
+      <motion.button
         type="button"
         disabled={loading}
         onClick={() => navigate('/profile')}
-        className={`${loading ? 'cursor-not-allowed opacity-50' : 'hover:cursor-pointer'} fixed border border-cyan-500 rounded-full text-cyan-700 bg-white hover:bg-cyan-600 hover:text-white top-8 md:top-10 right-8 md:right-14 hover:scale-110 transition-all duration-150`}
+        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: loading ? 1 : 1.1 }}
+        className={`${loading ? 'cursor-not-allowed opacity-50' : 'hover:cursor-pointer'} fixed border border-cyan-500 rounded-full text-cyan-700 bg-white hover:bg-cyan-600 hover:text-white top-8 md:top-10 right-8 md:right-14 transition-all duration-150`}
       >
         <CloseOutlinedIcon fontSize="small" />
-      </button>
+      </motion.button>
 
       {/* Edit Profile Form */}
-      <div className="max-w-md w-full">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: 'spring', stiffness: 100, damping: 15 }}
+        className="max-w-md w-full"
+      >
         <form
           onSubmit={handleSubmit}
           className="relative flex flex-col gap-6 md:border border-cyan-200 md:shadow-sm bg-transparent md:bg-white px-5 md:px-12 py-14 rounded-md"
@@ -134,7 +141,7 @@ const EditProfile = () => {
             </select>
           </div>
 
-          {/* Confirmation Checkbox */}
+          {/* Checkbox */}
           <span className="ml-1 flex items-center gap-2 text-xs font-medium">
             <input
               id="confirmation"
@@ -151,10 +158,12 @@ const EditProfile = () => {
             </label>
           </span>
 
-          {/* Submit Button */}
-          <button
+          {/* Submit */}
+          <motion.button
             type="submit"
             disabled={!isChecked}
+            whileTap={{ scale: 0.97 }}
+            whileHover={isChecked ? { scale: 1.03 } : {}}
             className={`py-2 font-semibold mt-4 rounded border transition-all duration-200 ${
               isChecked
                 ? 'bg-cyan-700 text-white hover:bg-white hover:text-cyan-700 border-cyan-700'
@@ -162,14 +171,13 @@ const EditProfile = () => {
             }`}
           >
             {loading ? 'Saving...' : 'Save'}
-          </button>
+          </motion.button>
         </form>
-      </div>
+      </motion.div>
 
       {/* Footer */}
       <p className="text-xs mt-10 text-gray-500">© 2025 GramHub from Meta</p>
 
-      {/* Loader */}
       {loading && <Loader size="lg" />}
     </div>
   )

@@ -7,6 +7,7 @@ import { Context } from '../context/Context';
 import { AuthContext } from '../context/AuthContext';
 import Loader from '../components/Loader';
 import axiosInstance from '../utils/axiosInstance';
+import { motion } from 'framer-motion';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -20,7 +21,6 @@ const Login = () => {
   const navigate = useNavigate();
   const inputRef = useRef(null);
 
-  // ✅ Autofocus on first input for better UX
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
@@ -30,7 +30,6 @@ const Login = () => {
     setPopupModal(true);
   };
 
-  // ✅ Extracted payload preparation logic to improve readability & early validation
   const prepareLoginPayload = () => {
     const trimmedUser = userIdentifier.trim();
     const trimmedPassword = password.trim();
@@ -58,7 +57,6 @@ const Login = () => {
       const { message, token } = response?.data || {};
 
       if (message && token) {
-        // ✅ Token handling moved to a single block for clarity
         localStorage.setItem('token', token);
         axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         await fetchCurrentUserData();
@@ -68,7 +66,6 @@ const Login = () => {
         setPassword('');
       }
     } catch (e) {
-      // ✅ Improved error fallback
       const errMsg = e?.response?.data?.message || 'An unexpected error occurred';
       showError(errMsg);
       console.error('Login error:', e);
@@ -77,9 +74,13 @@ const Login = () => {
     }
   };
 
-  // ✅ Reusable input renderer function to reduce repetition
   const renderInput = (type, value, onChange, label, autoComplete, ref) => (
-    <div className="mt-6 relative">
+    <motion.div
+      className="mt-6 relative"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       <input
         ref={ref}
         disabled={loading}
@@ -91,12 +92,12 @@ const Login = () => {
         required
         className={`w-full border-b-2 border-cyan-300 bg-transparent text-gray-800 placeholder-transparent focus:outline-none focus:border-cyan-600 peer py-2 ${
           loading ? 'cursor-not-allowed opacity-60' : ''
-        }`} // ✅ Slight visual cue when disabled
+        }`}
       />
       <label className="text-gray-500 text-sm absolute left-0 top-2.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2.5 transition-all">
         {label}
       </label>
-    </div>
+    </motion.div>
   );
 
   return (
@@ -104,7 +105,12 @@ const Login = () => {
       id="login-page"
       className="relative py-10 min-w-full flex flex-col items-center min-h-screen box-border bg-gradient-to-br from-white via-blue-50 to-cyan-50"
     >
-      <div className="max-w-md w-full">
+      <motion.div
+        className="max-w-md w-full"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: 'spring', stiffness: 120, damping: 16 }}
+      >
         <form
           onSubmit={handleLogIn}
           className="md:p-10 md:pt-10 pt-16 p-6 pb-5 bg-transparent md:bg-white md:shadow-md rounded-xl"
@@ -128,13 +134,15 @@ const Login = () => {
             'current-password'
           )}
 
-          <button
+          <motion.button
             disabled={loading}
             type="submit"
+            whileTap={{ scale: 0.95 }}
+            whileHover={!loading ? { scale: 1.03 } : {}}
             className="w-full bg-cyan-600 text-white rounded-md mt-6 py-2 text-sm font-semibold hover:bg-cyan-700 transition duration-300 disabled:opacity-50"
           >
             {loading ? 'Processing...' : 'Log in'}
-          </button>
+          </motion.button>
 
           <Link
             to="/forgot-password"
@@ -150,7 +158,7 @@ const Login = () => {
             </Link>
           </section>
         </form>
-      </div>
+      </motion.div>
 
       <p className="text-xs md:mt-10 text-gray-400">© 2025 GramHub from Meta</p>
 

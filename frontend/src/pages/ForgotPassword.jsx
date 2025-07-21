@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Context } from '../context/Context'
 import Loader from '../components/Loader'
 import { Link, useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 
 const apiUrl = import.meta.env.VITE_API_URL
 
@@ -19,7 +20,7 @@ const ForgotPassword = () => {
   const [otpStatusShow, setOtpStatusShow] = useState('')
   const [showOtpStatement, setShowOtpStatement] = useState('')
   const navigate = useNavigate()
-  // ✅ Step 1: Send OTP
+
   const handleVerifyEmailBtn = async () => {
     setLoading(true)
     try {
@@ -43,7 +44,6 @@ const ForgotPassword = () => {
     }
   }
 
-  // ✅ Step 2: Verify OTP
   const handleVerifyOtp = async () => {
     if (!otp || otp.length !== 6) {
       setModalMessage('OTP must be 6 digits.')
@@ -60,7 +60,6 @@ const ForgotPassword = () => {
         setOtpVerified(true)
         setOtpStatusShow(response.data.message)
         setShowOtpStatement('')
-
       }
     } catch (err) {
       if (err.response) {
@@ -74,7 +73,6 @@ const ForgotPassword = () => {
     }
   }
 
-  // ✅ Step 3: Change Password
   const handleChangePassword = async (e) => {
     e.preventDefault()
     if (!otpVerified) {
@@ -93,7 +91,6 @@ const ForgotPassword = () => {
         email: email.trim(),
         password: password.trim()
       })
-      console.log(response)
       if (response.status === 200) {
         setModalMessage("Password changed successfully.")
         setPopupModal(true)
@@ -116,12 +113,34 @@ const ForgotPassword = () => {
   }
 
   return (
-    <div className='flex flex-col items-center min-w-full min-h-[100vh]'>
-      <div className='relative max-w-md w-full'>
-        <form onSubmit={handleChangePassword} className='flex flex-col space-y-6 justify-center border-0 md:mt-15 mt-5 md:border-[1px] border-cyan-100 w-full p-10 bg-transparent md:bg-white md:shadow-md'>
-          <h2 className='font-semibold mt-8 text-[2rem] self-center text-cyan-700'>ForgotPassword</h2>
+    <motion.div
+      className='flex flex-col items-center min-w-full min-h-[100vh]'
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: 'spring', stiffness: 80, damping: 14 }}
+    >
+      <motion.div
+        className='relative max-w-md w-full'
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.15 } }
+        }}
+      >
+        <motion.form
+          onSubmit={handleChangePassword}
+          className='flex flex-col space-y-6 justify-center border-0 md:mt-15 mt-5 md:border-[1px] border-cyan-100 w-full p-10 bg-transparent md:bg-white md:shadow-md'
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0 }
+          }}
+        >
+          <h2 className='font-semibold mt-8 text-[2rem] self-center text-cyan-700'>
+            Forgot Password
+          </h2>
 
-          <div className='flex flex-col'>
+          <motion.div className='flex flex-col' variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}>
             <label className='text-sm font-medium mb-0.5 text-cyan-700'>Email</label>
             <input
               value={email}
@@ -131,15 +150,20 @@ const ForgotPassword = () => {
               disabled={otpVerified}
             />
             {isVerifyEmailBtn && (
-              <button type="button" onClick={handleVerifyEmailBtn} className='text-cyan-500 font-medium mt-1 text-sm self-end'>
+              <motion.button
+                type="button"
+                onClick={handleVerifyEmailBtn}
+                className='text-cyan-500 font-medium mt-1 text-sm self-end'
+                whileTap={{ scale: 0.95 }}
+              >
                 Send OTP
-              </button>
+              </motion.button>
             )}
             {otpStatusShow && <span className='text-cyan-600 mt-1 text-sm'>{otpStatusShow}</span>}
-          </div>
+          </motion.div>
 
           {!isVerifyEmailBtn && !otpVerified && (
-            <div className='flex flex-col'>
+            <motion.div className='flex flex-col' variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}>
               <label className='text-sm font-medium mb-0.5 text-cyan-700'>OTP</label>
               <input
                 type='text'
@@ -151,14 +175,28 @@ const ForgotPassword = () => {
                 pattern="\d{6}"
                 inputMode="numeric"
               />
-              <button type="button" onClick={handleVerifyOtp} className='text-cyan-500 font-medium mt-1 text-sm self-end'>
+              <motion.button
+                type="button"
+                onClick={handleVerifyOtp}
+                className='text-cyan-500 font-medium mt-1 text-sm self-end'
+                whileTap={{ scale: 0.95 }}
+              >
                 Verify OTP
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
           )}
-          {showOtpStatement && <span className='text-cyan-600 text-sm'>{showOtpStatement}</span>}
 
-          <div className='flex flex-col'>
+          {showOtpStatement && (
+            <motion.span
+              className='text-cyan-600 text-sm'
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              {showOtpStatement}
+            </motion.span>
+          )}
+
+          <motion.div className='flex flex-col' variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}>
             <label className='text-sm font-medium mb-0.5 text-cyan-700'>New Password</label>
             <input
               type='password'
@@ -167,9 +205,9 @@ const ForgotPassword = () => {
               className='text-sm bg-blue-50 border border-cyan-200 px-1.5 py-2 outline-0 rounded'
               placeholder='Enter new password'
             />
-          </div>
+          </motion.div>
 
-          <div className='flex flex-col'>
+          <motion.div className='flex flex-col' variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}>
             <label className='text-sm font-medium mb-0.5 text-cyan-700'>Confirm Password</label>
             <input
               type='password'
@@ -178,26 +216,34 @@ const ForgotPassword = () => {
               className='text-sm bg-blue-50 border border-cyan-200 px-1.5 py-2 outline-0 rounded'
               placeholder='Re-enter password'
             />
-          </div>
+          </motion.div>
 
-          <button
+          <motion.button
             type='submit'
             disabled={loading}
             className='px-3 mt-5 py-3 hover:cursor-pointer hover:text-cyan-700 hover:bg-white border-2 font-semibold transition-all duration-150 bg-cyan-700 text-white rounded'
+            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.03 }}
           >
             {loading ? 'Processing...' : 'Change Password'}
-          </button>
+          </motion.button>
 
-          <section className='my-5 py-5 border border-cyan-100 flex flex-col items-center justify-center bg-blue-50 rounded'>
+          <motion.section
+            className='my-5 py-5 border border-cyan-100 flex flex-col items-center justify-center bg-blue-50 rounded'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
             <p className='text-xs font-medium text-gray-600'>Do you know password?</p>
-            <Link to='/login' className='text-xs text-cyan-500 font-bold'>Log in</Link>
-          </section>
-        </form>
-
-      </div>
+            <Link to='/login' className='text-xs text-cyan-500 font-bold'>
+              Log in
+            </Link>
+          </motion.section>
+        </motion.form>
+      </motion.div>
       <p className='text-xs md:mt-10 text-gray-500'>© 2025 GramHub from Meta</p>
       {loading && <Loader size='lg' />}
-    </div>
+    </motion.div>
   )
 }
 

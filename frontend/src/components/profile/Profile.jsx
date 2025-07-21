@@ -47,6 +47,32 @@ const Profile = () => {
       </div>
     );
   }
+  const handleShareProfile = async () => {
+    const profileURL = `${window.location.origin}/profile-show/${currentUser.username}`;
+
+    // ✅ Modern native share API (for mobile/web apps that support it)
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `${currentUser.username}'s Profile on GramHub`,
+          text: 'Check out this profile!',
+          url: profileURL,
+        });
+      } catch (err) {
+        console.warn('Share cancelled or failed:', err);
+      }
+    } else {
+      // ✅ Fallback: Copy to clipboard
+      try {
+        await navigator.clipboard.writeText(profileURL);
+        setModalMessage('Profile link copied to clipboard!');
+        setPopupModal(true);
+      } catch (err) {
+        setModalMessage('Failed to copy link.');
+        setPopupModal(true);
+      }
+    }
+  };
 
   return (
     <>
@@ -56,7 +82,7 @@ const Profile = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="max-w-md relative mx-auto p-6 mt-10 bg-white shadow-xl rounded-2xl border border-blue-100"
+        className="max-w-md relative mx-auto p-6 mt-10 bg-white sm:shadow-xl rounded-2xl sm:border border-blue-100"
       >
         <h2 className="text-3xl font-semibold text-cyan-700 mb-4 text-center">ᴘʀᴏꜰɪʟᴇ</h2>
 
@@ -74,9 +100,8 @@ const Profile = () => {
               <img
                 src={avatarURL}
                 alt="Avatar"
-                className={`w-full h-full object-cover transition-opacity duration-300 ${
-                  imageLoaded ? 'opacity-100' : 'opacity-0'
-                }`}
+                className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'
+                  }`}
                 onLoad={() => setImageLoaded(true)}
                 onError={() => setImageError(true)}
               />
@@ -128,10 +153,7 @@ const Profile = () => {
               Edit Profile
             </button>
             <button
-              onClick={() => {
-                setModalMessage('Project is in process');
-                setPopupModal(true);
-              }}
+              onClick={handleShareProfile}
               className="flex-1 py-2.5 bg-white text-cyan-700 border border-cyan-300 hover:bg-cyan-600 hover:text-white text-xs font-medium rounded-md transition duration-150"
             >
               Share Profile

@@ -20,6 +20,7 @@ const ProfileShow = () => {
     const [isFollowComponent, setIsFollowComponent] = useState(false);
     const [componentType, setComponentType] = useState(null);
     const [isFollow, setIsFollow] = useState(false);
+    const [isProfilePhotoShow, setIsProfilePhotoShow] = useState(false);
 
     useEffect(() => {
         const fetchProfileShowData = async () => {
@@ -78,14 +79,9 @@ const ProfileShow = () => {
 
     if (loading) {
         return (
-            <motion.div
-                className="flex justify-center items-center h-screen text-gray-500 text-xl"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-            >
+            <div className="flex justify-center items-center h-screen text-gray-500 text-xl">
                 Loading Profile...
-            </motion.div>
+            </div>
         );
     }
 
@@ -100,17 +96,23 @@ const ProfileShow = () => {
     const { user, posts } = profileData;
 
     return (
-        <div className="max-w-5xl mx-auto p-4">
+        <motion.div
+            className="max-w-5xl mx-auto p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+        >
             {/* === Profile Header === */}
             <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 border-b pb-6 mb-8">
                 {user.avatarURL ? (
                     <img
+                        onClick={() => setIsProfilePhotoShow(true)}
                         src={user.avatarURL}
                         alt={`${user.username}'s profile picture`}
                         className="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover mt-4 border-2 sm:self-start border-gray-300 shadow"
                         onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = '/default-avatar.png'; // ✅ fallback image
+                            e.target.style.display = 'none';
                         }}
                     />
                 ) : (
@@ -122,7 +124,6 @@ const ProfileShow = () => {
                 <div className="text-center sm:text-left flex flex-col">
                     <h2 className="text-3xl font-bold">@{user.username}</h2>
                     {user.name && <p className="text-sm text-gray-600">{user.name}</p>}
-
                     <div className="flex gap-6 text-xs mt-2 self-center sm:self-start">
                         <button>
                             <span>{posts?.length || '0'}</span>
@@ -146,43 +147,32 @@ const ProfileShow = () => {
                             <span>{user.following?.length || '0'}</span>
                             <p>{user.following?.length === 1 ? 'following' : 'followings'}</p>
                         </button>
-                    </div>
-
-                    <AnimatePresence>
                         {isFollowComponent && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 30 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                <FollowersShow
-                                    type={componentType}
-                                    data={profileData.user}
-                                    setIsComponent={setIsFollowComponent}
-                                />
-                            </motion.div>
+                            <FollowersShow
+                                type={componentType}
+                                data={profileData.user}
+                                setIsComponent={setIsFollowComponent}
+                            />
                         )}
-                    </AnimatePresence>
+                    </div>
 
                     {user.gender && (
                         <p className="text-sm mt-0.5 text-gray-500">Gender: {user.gender}</p>
                     )}
+
                     {user.bio && (
                         <p className="mt-1 whitespace-pre-wrap text-gray-700 text-sm">{user.bio}</p>
                     )}
 
                     {profileData?.user?._id !== currentUser?._id && (
-                        <div className="flex flex-row gap-4 mt-2">
-                            <motion.button
-                                whileTap={{ scale: 0.95 }}
-                                whileHover={{ scale: 1.05 }}
+                        <div className="flex self-center flex-row gap-4 mt-3 mb-1">
+                            <button
                                 className="flex w-20 items-center justify-center h-8 bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-medium rounded-md transition duration-150"
                                 type="button"
                                 onClick={handleFollowToggle}
                             >
                                 {isFollow ? 'Following' : 'Follow'}
-                            </motion.button>
+                            </button>
                             <MessageBtn recipient={profileData?.user} />
                         </div>
                     )}
@@ -203,13 +193,13 @@ const ProfileShow = () => {
             ) : (
                 <motion.div
                     layout
-                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+                    className="grid grid-cols-3 sm:grid-cols-3 gap-[1px] sm:gap-2 bg-white"
                     initial="hidden"
                     animate="visible"
                     variants={{
                         visible: {
                             transition: {
-                                staggerChildren: 0.07,
+                                staggerChildren: 0.05,
                             },
                         },
                     }}
@@ -219,45 +209,48 @@ const ProfileShow = () => {
                             <motion.div
                                 key={post._id}
                                 layout
-                                layoutId={`post-${post._id}`} // ✅ For animated modals
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.4, ease: 'easeOut' }}
-                                role="button"
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.3, ease: 'easeOut' }}
+                                className="aspect-square overflow-hidden cursor-pointer"
                                 onClick={() => handlePostShow(post)}
-                                className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition hover:scale-[1.02] duration-200"
                             >
                                 <img
                                     src={post.image?.url}
                                     alt="Post"
-                                    className="w-full h-60 object-cover"
+                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300 ease-in-out"
                                 />
-                                <div className="p-3 text-sm text-gray-700">
-                                    <div className="flex justify-between items-center mb-1">
-                                        <span>❤️ {post.likes.length}</span>
-                                        <span>💬 {post.comments.length}</span>
-                                    </div>
-                                    <p className="text-xs text-gray-500">
-                                        {new Date(post.createdAt).toLocaleDateString()}
-                                    </p>
-                                </div>
                             </motion.div>
                         ))}
                     </AnimatePresence>
                 </motion.div>
             )}
 
+            {isPostShow && <PostShowCard postData={postShowData} setIsPostShow={setIsPostShow} />}
+
             <AnimatePresence>
-                {isPostShow && (
-                    <PostShowCard
-                        postData={postShowData}
-                        setIsPostShow={setIsPostShow}
-                        layoutId={`post-${postShowData?._id}`} // 🔄 for animation
-                    />
+                {isProfilePhotoShow && (
+                    <motion.div
+                        className="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center p-4"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setIsProfilePhotoShow(false)}
+                    >
+                        <motion.img
+                            src={user.avatarURL}
+                            alt="Profile"
+                            className="max-w-full max-h-full rounded-lg shadow-lg"
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            onClick={(e) => e.stopPropagation()}
+                        />
+                    </motion.div>
                 )}
             </AnimatePresence>
-        </div>
+        </motion.div>
     );
 };
 
