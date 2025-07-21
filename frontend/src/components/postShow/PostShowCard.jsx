@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import LikeBtn from '../../utils/buttons/LikeBtn';
 import CommentBtn from '../../utils/buttons/CommentBtn';
-import useClickOutsideMulti from '../../utils/reuseHooks/UseClickOutside';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axiosInstance from '../../utils/axiosInstance';
 import Loader from '../Loader';
@@ -27,7 +26,6 @@ const PostShowCard = ({ postData, setIsPostShow }) => {
         return () => document.body.style.overflow = ''
     })
     const formattedDate = new Date(createdAt).toLocaleString();
-    useClickOutsideMulti([containerRef], () => setIsPostShow(false))
     const handleDelete = async () => {
 
         setLoading(true)

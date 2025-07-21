@@ -14,7 +14,6 @@ const CommentBtn = ({ postComments, setPostComments, postId }) => {
     const commentListRef = useRef(null)
     const inputBoxRef = useRef(null)
     const hasUserCommented = postComments.some(comment => comment.userId === currentUser._id)
-    console.log(postComments)
     const handleCommentToggle = () => {
         setIsCommentBoxOpen(prev => !prev)
     }

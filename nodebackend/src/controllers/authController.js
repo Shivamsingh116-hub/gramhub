@@ -13,7 +13,7 @@ const verifyPassword = async (password, hashPassword) => {
     return isMatch
 }
 const generateToken = async (payload) => {
-    const token = await jwt.sign(payload, jwt_secret_key, { expiresIn: "10min" })
+    const token = await jwt.sign(payload, jwt_secret_key, { expiresIn: "1hr" })
     return token
 }
 const registerUser = async (req, res) => {

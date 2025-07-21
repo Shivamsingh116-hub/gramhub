@@ -1,7 +1,3 @@
-* {
-  box-sizing: border-box;
-}
-
 .navigation-item {
   display: flex;
   flex-direction: row;
@@ -9,22 +5,18 @@
   list-style: none;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
 
   li {
-    box-sizing: border-box;
     background-color: transparent;
     border-radius: 5px;
-    color: #0e7490; // cyan-700 base
     padding: 5px 5px;
     font-size: 15px;
-    transition: all 0.15s ease-in-out;
     font-weight: 500;
+    transition: all 0.15s ease-in-out;
 
     a {
       color: inherit;
       display: flex;
-      flex-direction: row;
       align-items: center;
       gap: 4px;
       text-decoration: none;
@@ -44,42 +36,27 @@
       }
     }
 
-    // Active Link Style
+    // ✅ FIX: Make sure `.active` applies properly via NavLink
     .active {
-      color: #06b6d4; // cyan-500
-
-      @media (min-width: 520px) {
-        &:hover {
-          color: #0e7490; // cyan-700
-          background-color: #f0f9ff; // soft hover bg
-          cursor: pointer;
-        }
-      }
+      color: #06b6d4;
     }
 
-    // Hover Effects for All Items
-    @media (min-width: 520px) {
-      &:hover {
-        background-color: #f0f9ff; // light cyan
-        color: #0e7490;
-        cursor: pointer;
-      }
+    // ✅ Hover Effect for non-active items
+    &:hover {
+      background-color: #f0f9ff;
+      color: #0e7490;
     }
   }
 
-  // Mobile Styles
-  @media (max-width: 900px) {
-    gap: 25px;
-  }
-
+  // ✅ Responsive Navbar
   @media (max-width: 520px) {
     position: fixed;
     bottom: 0;
+    left: 0;
     width: 100%;
     justify-content: space-around;
-    background-color: #ffffff;
-    padding: 10px 10px 15px 10px;
-    left: 0px;
+    background-color: #fff;
+    padding: 10px 10px 15px;
     box-shadow: 0px 0px 10px rgba(51, 51, 51, 0.1);
   }
 }
