@@ -21,6 +21,7 @@ import AvatarUploader from './components/profile/AvtarUploader'
 import EditProfile from './pages/profile/EditProfile'
 import ProfileShow from './pages/profile/ProfileShow'
 import Chat from './pages/Chat'
+import PublicRoute from './components/PublicRoute'
 
 const App = () => {
 
@@ -46,9 +47,9 @@ const App = () => {
         <Route path='/edit-profile' element={<PrivateRoute><EditProfile /></PrivateRoute>} />
         <Route path='/profile-show/:username' element={<PrivateRoute><ProfileShow /></PrivateRoute>} />
 
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/login' element={<PublicRoute><Login /></PublicRoute>} />
+        <Route path='/register' element={<PublicRoute><Register /></PublicRoute>} />
+        <Route path='/forgot-password' element={<PublicRoute><ForgotPassword /></PublicRoute>} />
       </Routes>
       {popupModal && <Modal message={modalMessage} onClose={() => setPopupModal(false)} duration={3000} />}
     </div>

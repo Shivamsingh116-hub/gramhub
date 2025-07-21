@@ -123,7 +123,6 @@ const ProfileShow = () => {
 
                 <div className="text-center sm:text-left flex flex-col">
                     <h2 className="text-3xl font-bold">@{user.username}</h2>
-                    {user.name && <p className="text-sm text-gray-600">{user.name}</p>}
                     <div className="flex gap-6 text-xs mt-2 self-center sm:self-start">
                         <button>
                             <span>{posts?.length || '0'}</span>
@@ -154,14 +153,28 @@ const ProfileShow = () => {
                                 setIsComponent={setIsFollowComponent}
                             />
                         )}
-                    </div>
 
-                    {user.gender && (
-                        <p className="text-sm mt-0.5 text-gray-500">Gender: {user.gender}</p>
+                    </div>
+                    {user.name && (
+                        <p className="text-md font-medium mt-1 text-gray-600">
+                            {user.name}
+                            {user.gender && (
+                                <>
+                                    {" "}
+                                    (
+                                    {user.gender === "male"
+                                        ? "he/him"
+                                        : user.gender === "female"
+                                            ? "she/her"
+                                            : "they/them"}
+                                    )
+                                </>
+                            )}
+                        </p>
                     )}
 
                     {user.bio && (
-                        <p className="mt-1 whitespace-pre-wrap text-gray-700 text-sm">{user.bio}</p>
+                        <p className=" whitespace-pre-wrap text-gray-700 text-sm">{user.bio}</p>
                     )}
 
                     {profileData?.user?._id !== currentUser?._id && (

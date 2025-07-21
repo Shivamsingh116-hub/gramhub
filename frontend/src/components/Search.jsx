@@ -97,7 +97,7 @@ const Search = () => {
                   <img
                     src={user.avatarURL}
                     alt={user.username}
-                    className="w-14 h-14 rounded-full object-cover"
+                    className="w-14 h-14 rounded-full object-cover aspect-square"
                   />
                 ) : (
                   <div className="w-14 h-14 rounded-full bg-blue-500 text-white flex items-center justify-center text-xl font-semibold uppercase">

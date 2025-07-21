@@ -3,13 +3,14 @@ import Loader from './Loader';
 import { useNavigate } from 'react-router-dom';
 import LikeBtn from '../utils/buttons/LikeBtn';
 import CommentBtn from '../utils/buttons/CommentBtn';
+import PostShowCard from './postShow/PostShowCard';
 
 const PostCard = ({ postData }) => {
   const [postImageLoaded, setPostImageLoaded] = useState(false);
   const [postImageError, setPostImageError] = useState(false);
   const [avatarError, setAvatarError] = useState(false);
   const [postComments, setPostComments] = useState(postData.comments);
-
+  const [postCardShow, setPostCardShow] = useState(false)
   const user = postData?.userId || {};
   const avatarURL = avatarError ? '/default-profile.png' : user?.avatarURL || '/default-profile.png';
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const PostCard = ({ postData }) => {
 
   return (
     <div className="max-w-md mx-auto bg-white md:rounded-xl md:shadow-sm border border-blue-50 overflow-hidden">
-      
+
       {/* ✅ Post Header */}
       <div
         role="button"
@@ -59,9 +60,9 @@ const PostCard = ({ postData }) => {
               <img
                 src={postData.image.url}
                 alt="Post"
-                className={`w-full max-h-[500px] object-cover transition-opacity duration-300 ${
-                  postImageLoaded ? 'opacity-100' : 'opacity-0'
-                }`}
+                onClick={() => { setPostCardShow(true) }}
+                className={`w-full max-h-[500px] object-cover transition-opacity duration-300 ${postImageLoaded ? 'opacity-100' : 'opacity-0'
+                  }`}
                 onLoad={() => setPostImageLoaded(true)}
                 onError={() => setPostImageError(true)}
               />
@@ -97,6 +98,7 @@ const PostCard = ({ postData }) => {
       <div className="px-4 pb-4 bg-white">
         <p className="text-xs text-gray-500">{readableDate}</p>
       </div>
+      {postCardShow && <PostShowCard postData={postData} setIsPostShow={setPostCardShow} />}
     </div>
   );
 };

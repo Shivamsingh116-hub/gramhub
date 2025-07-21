@@ -182,6 +182,7 @@ const Create = () => {
             placeholder="Write a caption (optional)..."
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
+            maxLength={150}
           />
 
           {/* ✅ Animated Progress Bar */}
