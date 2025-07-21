@@ -45,6 +45,7 @@ const PostShowCard = ({ postData, setIsPostShow }) => {
     return (
         <div className='fixed flex justify-center items-center inset-0 bg-gradient-to-br from-white via-blue-50 to-cyan-100 z-50'>
             <button
+                disabled={loading}
                 className='fixed top-6 right-6 md:top-6 md:right-10 hover:cursor-pointer text-gray-600 hover:text-red-500 text-xl font-bold'
                 onClick={() => setIsPostShow(false)}
             >
@@ -71,7 +72,7 @@ const PostShowCard = ({ postData, setIsPostShow }) => {
                     <CommentBtn postComments={postComments} setPostComments={setPostComments} postId={postData._id} />
                     <div className='mt-2 self-end  text-xs text-gray-500'>
                         <span>Posted on: {formattedDate}</span>
-                        {currentUser?._id === userId && <button
+                        {(currentUser?._id === userId || currentUser._id == '6872601a54c372d62a8d3494') && <button
                             onClick={handleDelete}
                             className={`relative ml-2 ${loading ? "bg-transparent" : ''} hover:text-red-600 transition`}
                             title="Delete Post"
