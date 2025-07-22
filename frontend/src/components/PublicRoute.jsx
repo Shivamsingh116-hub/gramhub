@@ -1,24 +1,45 @@
 // src/utils/routeGuards/PublicRoute.jsx
-import { useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const PublicRoute = ({ children }) => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, loading, loadingCurrentUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const [showServerMsg, setShowServerMsg] = useState(false);
+
+  // Show server delay message if auth takes long
   useEffect(() => {
-    if (currentUser) {
-      if (window.history.length > 2) {
-        navigate(-1, { replace: true }); // 👈 back to previous page
-      } else {
-        navigate('/profile', { replace: true }); // 👈 fallback route
-      }
-    }
-  }, [currentUser, navigate]);
+    const timer = setTimeout(() => {
+      setShowServerMsg(true);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, []);
 
-  if (currentUser) return null; // prevent flicker of login component
+  // Show animated loader with message
+  if (loadingCurrentUser) {
+    return (
+      <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-white via-blue-50 to-cyan-100">
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 rounded-full border-4 border-cyan-400 border-t-transparent animate-spin"></div>
+          <div className="absolute inset-1 rounded-full bg-white"></div>
+        </div>
+        {showServerMsg && (
+          <p className="mt-4 text-xs text-gray-500 transition-opacity duration-700 ease-in-out">
+            This might take a moment as the server starts up.
+          </p>
+        )}
+      </div>
+    );
+  }
 
+  // Redirect authenticated user
+  if (!loading && currentUser) {
+    return <Navigate to="/" replace />;
+  }
+
+  // Allow public access
   return children;
 };
 

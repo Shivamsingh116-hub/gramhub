@@ -3,21 +3,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import PostCard from '../components/PostCard';
 import axiosInstance from '../utils/axiosInstance';
 import { AuthContext } from '../context/AuthContext';
-import Loader from '../components/Loader';
 
 const Home = () => {
   const { fetchPost, loading, fetchRandomPost, hasMore } = useContext(AuthContext);
   const posts = fetchPost || [];
   const debounceTimerRef = useRef(null);
 
-  // ✅ Improvement: Moved scroll check to a reusable function
   const isNearBottom = () => {
     const { scrollY, innerHeight } = window;
     const { scrollHeight } = document.documentElement;
     return scrollY + innerHeight >= scrollHeight - 100;
   };
 
-  // ✅ Scroll logic with debounce
   const handleScroll = useCallback(() => {
     if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
 
@@ -26,15 +23,13 @@ const Home = () => {
         const lastCreatedAt = posts.length > 0 ? posts[posts.length - 1].createdAt : null;
         fetchRandomPost(lastCreatedAt);
       }
-    }, 150); // ✅ snappier UX
+    }, 150);
   }, [posts, loading, hasMore, fetchRandomPost]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
-
-
 
   return (
     <div className="relative w-full min-h-screen">
@@ -71,9 +66,44 @@ const Home = () => {
         </div>
       )}
 
-      {/* ✅ Loader */}
-      {loading  && <Loader/>}
-    </div>
+      {/* ✅ Premium Feel Inline Loader (3 bouncing dots) */}
+      {loading && (
+        <motion.div
+          className="flex justify-center items-center min-h-screen"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.2
+              }
+            }
+          }}
+        >
+          {[...Array(3)].map((_, i) => (
+            <motion.span
+              key={i}
+              className="w-3 h-3 bg-cyan-500 rounded-full mx-1"
+              variants={{
+                hidden: { y: 0, opacity: 0.4 },
+                visible: {
+                  y: [-6, 6, -6],
+                  opacity: 1,
+                  transition: {
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    duration: 0.6,
+                    ease: "easeInOut"
+                  }
+                }
+              }}
+            />
+          ))}
+        </motion.div>
+      )}
+
+
+    </div >
   );
 };
 

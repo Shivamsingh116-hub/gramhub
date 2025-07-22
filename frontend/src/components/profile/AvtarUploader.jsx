@@ -17,10 +17,24 @@ const AvatarUploader = () => {
   const [avatar, setAvatar] = useState('');
   const [avatarUrl, setAvatarUrl] = useState(currentUser.avatarURL);
   const [loading, setLoading] = useState(false);
-  const [preview, setPreview] = useState(false); // Fullscreen preview state
+  const [preview, setPreview] = useState(false);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
-  const currentRef = useRef()
+
+  const avatarRef = useRef();
+  const previewRef = useRef(); // ✅ for fullscreen preview
+
+  useClickOutsideMulti(
+    preview ? [avatarRef, previewRef] : [avatarRef],
+    () => {
+      if (preview) {
+        setPreview(false); // just close the preview
+      } else {
+        navigate('/profile'); // fallback if not in preview
+      }
+    }
+  );
+
   const handleSelectavatar = (e) => {
     const file = e.target.files[0];
     if (!(file?.type?.startsWith('image/'))) {
@@ -108,7 +122,7 @@ const AvatarUploader = () => {
       document.body.style.overflow = '';
     };
   }, []);
-  useClickOutsideMulti([currentRef], () => window.history.back())
+
   return (
     <div className="fixed inset-0 z-50 backdrop-blur-sm flex flex-col justify-center items-center gap-4 bg-gradient-to-br from-white via-blue-50 to-cyan-100">
       <button
@@ -121,77 +135,80 @@ const AvatarUploader = () => {
         <CloseOutlinedIcon fontSize="small" />
       </button>
 
-      {/* Avatar Image with Motion */}
-      <motion.div
-        layout
-        className="relative w-48 h-48 md:w-64 md:h-64 rounded-full border-2 border-cyan-300 shadow-sm overflow-hidden group transition-all duration-200 bg-white cursor-pointer"
-        whileHover={{ scale: 1.03 }}
-        ref={currentRef}
-        onClick={() => avatarUrl && setPreview(true)}
-      >
-        {avatarUrl ? (
-          <motion.img
-            key={avatarUrl}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            src={avatarUrl}
-            alt="Avatar"
-            className="w-full h-full object-cover"
-            onError={() => setAvatarUrl(null)}
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-cyan-50 text-cyan-600 text-4xl font-semibold">
-            {currentUser?.username?.[0]?.toUpperCase() || 'U'}
-          </div>
-        )}
-        {loading && <Loader size="md" />}
-      </motion.div>
-
-      <div className="flex justify-center mt-5 gap-8 md:gap-16">
-        <label
-          htmlFor="avatarUpload"
-          tabIndex={0}
-          role="button"
-          aria-label="Upload Avatar"
-          className={`w-24 h-10 flex items-center justify-center gap-1 text-sm font-medium border rounded-md transition duration-150 ${loading
-            ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-            : 'bg-white text-cyan-800 border-cyan-500 hover:bg-cyan-600 hover:text-white'
-            }`}
+      {/* Avatar Container */}
+      <div ref={avatarRef}>
+        <motion.div
+          layout
+          className="relative w-48 h-48 md:w-64 md:h-64 rounded-full border-2 border-cyan-300 shadow-sm overflow-hidden group transition-all duration-200 bg-white cursor-pointer"
+          whileHover={{ scale: 1.03 }}
+          onClick={() => avatarUrl && setPreview(true)}
         >
-          <EditOutlinedIcon fontSize="small" />
-          Edit
-          <input
-            ref={fileInputRef}
-            type="file"
-            id="avatarUpload"
+          {avatarUrl ? (
+            <motion.img
+              key={avatarUrl}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              src={avatarUrl}
+              alt="Avatar"
+              className="w-full h-full object-cover"
+              onError={() => setAvatarUrl(null)}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-cyan-50 text-cyan-600 text-4xl font-semibold">
+              {currentUser?.username?.[0]?.toUpperCase() || 'U'}
+            </div>
+          )}
+          {loading && <Loader size="md" />}
+        </motion.div>
+
+        {/* Buttons */}
+        <div className="flex justify-center mt-5 gap-8 md:gap-16">
+          <label
+            htmlFor="avatarUpload"
+            tabIndex={0}
+            role="button"
+            aria-label="Upload Avatar"
+            className={`w-24 h-10 flex items-center justify-center gap-1 text-sm font-medium border rounded-md transition duration-150 ${loading
+              ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+              : 'bg-white text-cyan-800 border-cyan-500 hover:bg-cyan-600 hover:text-white'
+              }`}
+          >
+            <EditOutlinedIcon fontSize="small" />
+            Edit
+            <input
+              ref={fileInputRef}
+              type="file"
+              id="avatarUpload"
+              disabled={loading}
+              onChange={handleSelectavatar}
+              className="hidden"
+            />
+          </label>
+
+          <button
+            type="button"
+            onClick={handleUploadavatar}
             disabled={loading}
-            onChange={handleSelectavatar}
-            className="hidden"
-          />
-        </label>
-
-        <button
-          type="button"
-          onClick={handleUploadavatar}
-          disabled={loading}
-          className={`w-24 h-10 text-sm font-medium border rounded-md transition duration-150 ${loading
-            ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-            : 'bg-cyan-800 text-white hover:bg-white hover:text-cyan-800 hover:border-cyan-700'
-            }`}
-        >
-          {loading ? 'Uploading...' : 'Upload'}
-        </button>
+            className={`w-24 h-10 text-sm font-medium border rounded-md transition duration-150 ${loading
+              ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+              : 'bg-cyan-800 text-white hover:bg-white hover:text-cyan-800 hover:border-cyan-700'
+              }`}
+          >
+            {loading ? 'Uploading...' : 'Upload'}
+          </button>
+        </div>
       </div>
 
-      {/* 🔍 Fullscreen Image Preview */}
+      {/* Fullscreen Image Preview */}
       <AnimatePresence>
         {preview && (
           <motion.div
+            ref={previewRef}
             className="fixed inset-0 z-[999] bg-black/70 flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setPreview(false)}
+            onClick={() => setPreview(false)} // backdrop closes preview
           >
             <motion.img
               src={avatarUrl}
@@ -200,6 +217,7 @@ const AvatarUploader = () => {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()} // don't close on image click
             />
           </motion.div>
         )}

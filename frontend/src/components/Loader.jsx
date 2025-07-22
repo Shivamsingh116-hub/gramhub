@@ -2,13 +2,7 @@ import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Loader = ({ size = 'md' }) => {
-  // ✅ Disable body scroll while loader is visible
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, []);
+ 
 
   // ✅ Class mapping for loader size
   const sizeClasses = {

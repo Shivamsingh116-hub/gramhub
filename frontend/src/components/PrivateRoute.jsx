@@ -19,7 +19,7 @@ const PrivateRoute = ({ children }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowServerMsg(true);
-    }, 4000); // Delay for server message
+    }, 5000); // Delay for server message
     return () => clearTimeout(timer);
   }, []);
   if (loadingCurrentUser) {

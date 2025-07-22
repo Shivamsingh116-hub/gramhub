@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import axiosInstance from '../../utils/axiosInstance';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import CircularProgress from '@mui/material/CircularProgress';
-import { motion, AnimatePresence } from 'framer-motion'; // ✅ Framer Motion added
+import { motion, AnimatePresence } from 'framer-motion';
 
 const CommentAndLikeShow = ({ postId, setIsComponent, type }) => {
   const [data, setData] = useState([]);
@@ -20,7 +20,7 @@ const CommentAndLikeShow = ({ postId, setIsComponent, type }) => {
         const { data } = await axiosInstance.get(
           `/get/fetch-comment-or-like/${postId}?type=${type}`
         );
-        setData(data?.[`${type}s`] || []); // ✅ Destructuring and fallback
+        setData(data?.[`${type}s`] || []);
       } catch (err) {
         console.error(err);
         setError('Failed to fetch data.');
@@ -79,37 +79,44 @@ const CommentAndLikeShow = ({ postId, setIsComponent, type }) => {
             <p className="text-gray-500 text-sm text-center">No {type}s available.</p>
           ) : (
             <ul className="space-y-2">
-              {[...data]
-                .reverse()
-                .map((item, index) =>
-                  type === 'like' ? (
-                    <li key={index} className="flex items-center space-x-2 border-b pb-1">
+              {[...data].reverse().map((item, index) =>
+                type === 'like' ? (
+                  <li key={index} className="flex items-center space-x-2 border-b pb-1">
+                    {item.avatarURL ? (
                       <img
-                        src={item.avatarURL || '/default-avatar.png'}
+                        src={item.avatarURL}
                         alt="avatar"
                         className="w-8 h-8 rounded-full object-cover"
                       />
-                      <span className="text-gray-700">{item.username}</span>
-                    </li>
-                  ) : (
-                    <li
-                      key={index}
-                      className="flex items-start space-x-3 border p-2 rounded-md bg-gray-50"
-                    >
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-cyan-600 flex items-center justify-center text-white font-semibold uppercase">
+                        {item.username?.charAt(0) || 'U'}
+                      </div>
+                    )}
+                    <span className="text-gray-700">{item.username}</span>
+                  </li>
+                ) : (
+                  <li key={index} className="flex items-start space-x-3 border p-2 rounded-md bg-gray-50">
+                    {item.userId?.avatarURL ? (
                       <img
-                        src={item.userId.avatarURL || '/default-avatar.png'}
+                        src={item.userId.avatarURL}
                         alt={`${item.userId.username}'s avatar`}
                         className="w-8 h-8 rounded-full object-cover"
                       />
-                      <div>
-                        <p className="text-sm font-semibold text-gray-800">
-                          {item.userId.username}
-                        </p>
-                        <p className="text-sm text-gray-700">{item.text}</p>
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-cyan-600 flex items-center justify-center text-white font-semibold uppercase">
+                        {item.userId?.username?.charAt(0) || 'U'}
                       </div>
-                    </li>
-                  )
-                )}
+                    )}
+                    <div>
+                      <p className="text-sm font-semibold text-gray-800">
+                        {item.userId?.username}
+                      </p>
+                      <p className="text-sm text-gray-700">{item.text}</p>
+                    </div>
+                  </li>
+                )
+              )}
             </ul>
           )}
         </div>

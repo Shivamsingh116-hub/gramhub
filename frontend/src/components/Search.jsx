@@ -23,7 +23,6 @@ const Search = () => {
 
     try {
       setLoading(true);
-
       const res = await axiosInstance.get(`/get/user?username=${username}`);
       if (res?.data) {
         const alreadyExists = showData.some(user => user._id === res.data._id);
@@ -48,12 +47,26 @@ const Search = () => {
     }
   };
 
+  const fallbackText = "Search for users. Discover stories. Connect instantly with GramHub.";
+  const words = fallbackText.split(" ");
+
   return (
-    <div className="w-full flex flex-col items-center mt-6 px-4">
-      {/* Search Input */}
+    <div className="min-h-screen w-full bg-gradient-to-r from-white via-blue-50 to-cyan-100 flex flex-col items-center justify-start py-12 px-4">
+      
+      {/* Heading */}
+      <motion.h1
+        className="text-4xl font-bold text-cyan-600 mb-8 text-center"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        Search Users on GramHub 🔍
+      </motion.h1>
+
+      {/* Search Bar */}
       <form
         onSubmit={handleSubmit}
-        className="flex items-center w-full max-w-md mb-6"
+        className="flex items-center w-full max-w-md mb-10 bg-white rounded-lg shadow-md overflow-hidden"
       >
         <input
           type="text"
@@ -61,22 +74,58 @@ const Search = () => {
           placeholder="Search by username..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="flex-grow px-4 py-2 rounded-l-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="flex-grow px-4 py-3 text-sm focus:outline-none"
         />
         <button
           type="submit"
           disabled={loading}
-          className="px-4 py-2 bg-blue-500 text-white font-medium rounded-r-md hover:bg-blue-600 transition"
+          className="px-6 py-3 bg-cyan-600 text-white text-sm font-semibold hover:bg-cyan-700 transition-all"
         >
           {loading ? 'Searching...' : 'Search'}
         </button>
       </form>
 
-      {/* Result Section */}
+      {/* Fallback Message if no data */}
+      {!loading && showData.length === 0 && (
+        <motion.div
+          className="text-center text-cyan-600 text-lg max-w-xl px-4 mb-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+        >
+          <motion.p
+            className="text-xl font-semibold"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              visible: {
+                transition: {
+                  staggerChildren: 0.12,
+                },
+              },
+            }}
+          >
+            {words.map((word, i) => (
+              <motion.span
+                key={i}
+                className="inline-block mr-2"
+                variants={{
+                  hidden: { opacity: 0, y: 10 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+              >
+                {word}
+              </motion.span>
+            ))}
+          </motion.p>
+        </motion.div>
+      )}
+
+      {/* Search Results */}
       <AnimatePresence>
         {showData.length > 0 && (
           <motion.div
-            className="w-full max-w-lg flex flex-col gap-4"
+            className="w-full max-w-2xl flex flex-col gap-4 px-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -91,23 +140,23 @@ const Search = () => {
                 transition={{ duration: 0.3 }}
                 role="button"
                 onClick={() => navigate(`/profile-show/${user.username}`)}
-                className="p-4 border rounded-md bg-gray-50 shadow-sm hover:bg-blue-50 transition cursor-pointer flex items-center gap-4"
+                className="p-4 border rounded-xl bg-white shadow-md hover:bg-blue-100 transition cursor-pointer flex items-center gap-4"
               >
                 {user.avatarURL ? (
                   <img
                     src={user.avatarURL}
                     alt={user.username}
-                    className="w-14 h-14 rounded-full object-cover aspect-square"
+                    className="w-14 h-14 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-14 h-14 rounded-full bg-blue-500 text-white flex items-center justify-center text-xl font-semibold uppercase">
+                  <div className="w-14 h-14 rounded-full bg-cyan-600 text-white flex items-center justify-center text-xl font-semibold uppercase">
                     {user.username.charAt(0)}
                   </div>
                 )}
                 <div>
                   <p className="font-semibold text-gray-800">{user.username}</p>
                   {user.bio && (
-                    <p className="text-sm text-gray-500 line-clamp-2">{user.bio}</p>
+                    <p className="text-sm text-gray-600 line-clamp-2">{user.bio}</p>
                   )}
                 </div>
               </motion.div>

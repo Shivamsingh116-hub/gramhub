@@ -4,7 +4,7 @@ import axiosInstance from '../utils/axiosInstance';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { motion } from 'framer-motion'; // ✅ Framer Motion added
+import { motion } from 'framer-motion';
 
 const Create = () => {
   const [post, setPost] = useState(null);
@@ -20,7 +20,6 @@ const Create = () => {
   const { fetchRandomPost } = useContext(AuthContext);
 
   useEffect(() => {
-    // ✅ Revoke object URL to avoid memory leaks
     return () => {
       if (postURL?.startsWith('blob:')) URL.revokeObjectURL(postURL);
     };
@@ -30,7 +29,7 @@ const Create = () => {
     const file = e.target.files[0];
     if (!file) {
       resetUpload();
-      setImageError('No image/video selected');
+      setImageError('No image selected');
       return;
     }
 
@@ -39,13 +38,13 @@ const Create = () => {
 
     if (isVideo) {
       resetUpload();
-      setImageError('Currently video uploading feature is not available');
+      setImageError('Video upload not supported currently.');
       return;
     }
 
     if (!isImage) {
       resetUpload();
-      setImageError('Please select an image file');
+      setImageError('Only image files are allowed.');
       return;
     }
 
@@ -72,20 +71,15 @@ const Create = () => {
 
   const handleUploadPost = async (e) => {
     e.preventDefault();
-
     if (!post) {
       setImageError('No file selected');
       return;
     }
 
-    const isImage = post.type.startsWith('image/');
-    const folder = isImage ? 'image' : 'other';
-
     setIsUploading(true);
-
     try {
       const { data: sigData } = await axiosInstance.post('/upload/get-post-upload-signature', {
-        folder,
+        folder: 'image',
         contentType: post.type,
       });
 
@@ -109,17 +103,14 @@ const Create = () => {
         caption,
       });
 
-      const message = uploadPostRes?.message || 'Upload successful';
-      const postData = uploadPostRes?.postData;
-
-      setRecentPostUploadData(postData);
-      setModalMessage(message);
+      setRecentPostUploadData(uploadPostRes?.postData);
+      setModalMessage(uploadPostRes?.message || 'Upload successful');
       setPopupModal(true);
       fetchRandomPost(null, true);
       navigate('/');
     } catch (err) {
       console.error(err);
-      setModalMessage('Upload failed. Please try again.');
+      setModalMessage('Upload failed. Try again.');
       setPopupModal(true);
     } finally {
       setIsUploading(false);
@@ -128,104 +119,108 @@ const Create = () => {
 
   return (
     <motion.div
-      className="w-full min-h-screen flex flex-col items-center bg-gradient-to-b from-white via-blue-50 to-cyan-50"
+      className="w-full min-h-screen bg-gradient-to-r from-white via-blue-50 to-cyan-100 flex items-center justify-center px-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div className="w-full max-w-md">
-        <form
-          onSubmit={handleUploadPost}
-          onDrop={handleDrop}
-          onDragOver={(e) => e.preventDefault()}
-          className={`px-5 py-12 ${post ? 'mt-16' : 'mt-40'} gap-4 md:border border-cyan-200 md:shadow-md flex flex-col rounded-xl bg-transparent md:bg-white`}
+      <motion.form
+        onSubmit={handleUploadPost}
+        onDrop={handleDrop}
+        onDragOver={(e) => e.preventDefault()}
+        className="w-full max-w-md sm:bg-white mt-[-150px] shadow-lg rounded-2xl p-6 md:p-8 border border-cyan-100"
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.4 }}
+      >
+        <motion.h1
+          className="text-2xl font-bold text-center text-cyan-700 mb-4"
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
         >
-          <motion.h2
-            className="text-xl font-semibold text-center mb-2 text-cyan-700"
-            initial={{ y: -10, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-          >
-            Create Post
-          </motion.h2>
+          Share a Moment 🌿
+        </motion.h1>
 
-          {imageError && <span className="text-rose-500 text-sm">{imageError}</span>}
+        {imageError && (
+          <p className="text-sm text-rose-500 text-center mb-2">{imageError}</p>
+        )}
 
+        <div className="mb-4 flex justify-center">
           <label
             htmlFor="postUpload"
-            className="cursor-pointer self-center bg-cyan-600 text-white hover:bg-cyan-700 
-            border border-cyan-600 hover:border-cyan-700 transition-all duration-150 px-5 py-2 rounded-md font-medium text-sm"
+            className="bg-cyan-600 text-white hover:bg-cyan-700 px-5 py-2 rounded-full text-sm font-medium cursor-pointer"
           >
-            {post ? 'Change File' : 'Upload Media'}
+            {post ? 'Change Image' : 'Upload Image'}
             <input
-              disabled={isUploading}
               id="postUpload"
               ref={fileInputRef}
               type="file"
               onChange={handleFileChange}
+              disabled={isUploading}
               className="hidden"
             />
           </label>
+        </div>
 
-          {/* ✅ Preview with fade-in animation */}
-          {postURL && post?.type.startsWith('image/') && (
-            <motion.img
-              src={postURL}
-              className="w-full object-contain max-h-64 rounded-md"
-              alt="preview"
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-            />
-          )}
-
-          <textarea
-            className="border border-cyan-200 p-2 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-cyan-400"
-            placeholder="Write a caption (optional)..."
-            value={caption}
-            onChange={(e) => setCaption(e.target.value)}
-            maxLength={150}
+        {postURL && (
+          <motion.img
+            src={postURL}
+            alt="Preview"
+            className="rounded-lg mb-4 w-full h-auto max-h-64 object-cover"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
           />
+        )}
 
-          {/* ✅ Animated Progress Bar */}
-          {isUploading && (
+        <input
+          type="text"
+          placeholder="Write a caption... (optional)"
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
+          maxLength={150}
+          className="w-full border border-cyan-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-400 mb-4"
+        />
+
+        {isUploading && (
+          <motion.div
+            className="w-full bg-cyan-100 rounded-full h-2 overflow-hidden mb-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
             <motion.div
-              className="w-full bg-cyan-100 rounded-full h-2 overflow-hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
-              <motion.div
-                className="bg-cyan-600 h-2"
-                initial={{ width: 0 }}
-                animate={{ width: `${uploadProgress}%` }}
-                transition={{ ease: 'easeOut', duration: 0.3 }}
-              />
-            </motion.div>
-          )}
+              className="bg-cyan-600 h-2"
+              initial={{ width: 0 }}
+              animate={{ width: `${uploadProgress}%` }}
+              transition={{ ease: 'easeOut', duration: 0.4 }}
+            />
+          </motion.div>
+        )}
 
-          <div className="flex items-center justify-between">
-            {post && !isUploading && (
-              <button
-                type="button"
-                className="text-rose-500 text-sm underline"
-                onClick={resetUpload}
-              >
-                Cancel Upload
-              </button>
-            )}
-            {post && (
-              <button
-                type="submit"
-                disabled={isUploading}
-                className={`py-1 px-4 font-medium border rounded-md transition-all duration-150 
-                  ${isUploading
-                    ? 'bg-cyan-100 text-cyan-400 cursor-not-allowed'
-                    : 'bg-cyan-600 text-white hover:bg-cyan-700'}`}
-              >
-                {isUploading ? 'Uploading...' : 'Upload'}
-              </button>
-            )}
-          </div>
-        </form>
-      </div>
+        <div className="flex justify-between items-center">
+          {post && !isUploading && (
+            <button
+              type="button"
+              className="text-sm text-rose-500 underline"
+              onClick={resetUpload}
+            >
+              Cancel
+            </button>
+          )}
+          {post && (
+            <button
+              type="submit"
+              disabled={isUploading}
+              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                isUploading
+                  ? 'bg-cyan-100 text-cyan-400 cursor-not-allowed'
+                  : 'bg-cyan-600 text-white hover:bg-cyan-700'
+              }`}
+            >
+              {isUploading ? 'Uploading...' : 'Post'}
+            </button>
+          )}
+        </div>
+      </motion.form>
     </motion.div>
   );
 };
