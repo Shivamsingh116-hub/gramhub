@@ -50,6 +50,7 @@ const registerUser = async (req, res) => {
 }
 const loginUser = async (req, res) => {
     const authPayload = req.body
+
     if (!authPayload) {
         return res.status(401).json({ message: "Fill all credentials" })
     }
