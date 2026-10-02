@@ -17,12 +17,12 @@ const chatRoutes = require("./src/routes/chatRoutes");
 const {
   socketHandler,
 } = require("./src/controllers/socketController.js/socketHandler");
-app.use(
-  CORS({
-    origin: [process.env.LOCALHOST_URL, process.env.FRONTEND_URL],
-    credentials: true,
-  }),
-);
+const corsOptions = {
+  origin: [process.env.LOCALHOST_URL, process.env.FRONTEND_URL],
+  credentials: true,
+};
+
+app.use(CORS(corsOptions));
 const io = new Server(server, {
   cors: {
     origin: "*",
