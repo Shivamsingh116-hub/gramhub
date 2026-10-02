@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -91,12 +92,12 @@ const Chatbot = () => {
           <p className="text-sm text-gray-500">Ask me anything</p>
         </div>
         <div>
-          <button
-            class="hover:cursor-pointer"
-            onClick={() => (window.location.href = "/")}
+          <Link
+            to="/"
+            className="flex shrink-0 items-center gap-1.5 text-xs font-semibold text-cyan-600 hover:text-cyan-700"
           >
             <HomeIcon />
-          </button>
+          </Link>
         </div>
       </header>
 
