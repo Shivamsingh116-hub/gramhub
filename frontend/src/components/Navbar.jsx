@@ -7,6 +7,7 @@ import ExploreOutlinedIcon from '@mui/icons-material/ExploreOutlined';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined'; // ✅ FIXED: typo in import (was cut off)
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import '../styles/Navbar.scss';
 import Loader from './Loader';
@@ -24,6 +25,7 @@ const Navbar = () => {
     { path: "/create", title: "Create", icon: <AddBoxOutlinedIcon /> },
     { path: "/notification", title: "Notification", icon: <FavoriteBorderOutlinedIcon /> },
     { path: "/messages", title: "Messages", icon: <ForumOutlinedIcon /> },
+    { path: "/chatbot", title: "Chatbot", icon: <HeadsetMicIcon /> },
   ];
 
   // ✅ Image Preload + Error Handling

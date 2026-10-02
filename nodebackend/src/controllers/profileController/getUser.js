@@ -1,6 +1,7 @@
 const userModel = require("../../models/Users");
 
 const getUser = async (req, res) => {
+  
   const { username } = req.query;
 
   try {

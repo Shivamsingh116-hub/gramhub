@@ -1,19 +1,20 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
-import '../styles/Register.scss';
-import '../styles/Login.scss';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { Context } from '../context/Context';
-import { AuthContext } from '../context/AuthContext';
-import Loader from '../components/Loader';
-import axiosInstance from '../utils/axiosInstance';
-import { motion } from 'framer-motion';
+import React, { useContext, useEffect, useState, useRef } from "react";
+import "../styles/Register.scss";
+import "../styles/Login.scss";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Context } from "../context/Context";
+import { AuthContext } from "../context/AuthContext";
+import Loader from "../components/Loader";
+import axiosInstance from "../utils/axiosInstance";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
+import { motion } from "framer-motion";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const Login = () => {
-  const [userIdentifier, setUserIdentifier] = useState('');
-  const [password, setPassword] = useState('');
+  const [userIdentifier, setUserIdentifier] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { setModalMessage, setPopupModal } = useContext(Context);
@@ -35,13 +36,13 @@ const Login = () => {
     const trimmedPassword = password.trim();
 
     if (!trimmedUser || !trimmedPassword) {
-      showError('Please fill all fields');
+      showError("Please fill all fields");
       return null;
     }
 
-    const isEmail = trimmedUser.includes('@');
+    const isEmail = trimmedUser.includes("@");
     return {
-      [isEmail ? 'email' : 'username']: trimmedUser,
+      [isEmail ? "email" : "username"]: trimmedUser,
       password: trimmedPassword,
     };
   };
@@ -57,18 +58,20 @@ const Login = () => {
       const { message, token } = response?.data || {};
 
       if (message && token) {
-        localStorage.setItem('token', token);
-        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        localStorage.setItem("token", token);
+        axiosInstance.defaults.headers.common["Authorization"] =
+          `Bearer ${token}`;
         await fetchCurrentUserData();
         showError(message);
-        navigate('/');
-        setUserIdentifier('');
-        setPassword('');
+        navigate("/");
+        setUserIdentifier("");
+        setPassword("");
       }
     } catch (e) {
-      const errMsg = e?.response?.data?.message || 'An unexpected error occurred';
+      const errMsg =
+        e?.response?.data?.message || "An unexpected error occurred";
       showError(errMsg);
-      console.error('Login error:', e);
+      console.error("Login error:", e);
     } finally {
       setLoading(false);
     }
@@ -91,7 +94,7 @@ const Login = () => {
         type={type}
         required
         className={`w-full border-b-2 border-cyan-300 bg-transparent text-gray-800 placeholder-transparent focus:outline-none focus:border-cyan-600 peer py-2 ${
-          loading ? 'cursor-not-allowed opacity-60' : ''
+          loading ? "cursor-not-allowed opacity-60" : ""
         }`}
       />
       <label className="text-gray-500 text-sm absolute left-0 top-2.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2.5 transition-all">
@@ -109,29 +112,31 @@ const Login = () => {
         className="max-w-md w-full"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ type: 'spring', stiffness: 120, damping: 16 }}
+        transition={{ type: "spring", stiffness: 120, damping: 16 }}
       >
         <form
           onSubmit={handleLogIn}
           className="md:p-10 md:pt-10 pt-16 p-6 pb-5 bg-transparent md:bg-white md:shadow-md rounded-xl"
         >
-          <h2 className="text-3xl font-extrabold text-cyan-700 text-center mb-6">GramHub</h2>
+          <h2 className="text-3xl font-extrabold text-cyan-700 text-center mb-6">
+            GramHub
+          </h2>
 
           {renderInput(
-            'text',
+            "text",
             userIdentifier,
             (e) => setUserIdentifier(e.target.value),
-            'Username/Email',
-            'email',
-            inputRef
+            "Username/Email",
+            "email",
+            inputRef,
           )}
 
           {renderInput(
-            'password',
+            "password",
             password,
             (e) => setPassword(e.target.value),
-            'Password',
-            'current-password'
+            "Password",
+            "current-password",
           )}
 
           <motion.button
@@ -141,27 +146,47 @@ const Login = () => {
             whileHover={!loading ? { scale: 1.03 } : {}}
             className="w-full bg-cyan-600 text-white rounded-md mt-6 py-2 text-sm font-semibold hover:bg-cyan-700 transition duration-300 disabled:opacity-50"
           >
-            {loading ? 'Processing...' : 'Log in'}
+            {loading ? "Processing..." : "Log in"}
           </motion.button>
 
-          <Link
-            to="/forgot-password"
-            className="block text-center text-xs text-cyan-600 hover:underline mt-3"
-          >
-            Forgot password?
-          </Link>
+          <div  className="mt-3 flex w-full !flex-row items-center justify-center whitespace-nowrap">
+            {" "}
+            {/* Forgot Password */}{" "}
+            <Link
+              to="/forgot-password"
+              className="shrink-0 text-xs text-cyan-600 hover:underline"
+            >
+              {" "}
+              Forgot password?{" "}
+            </Link>{" "}
+            {/* AI Assistant */}{" "}
+            <Link
+              to="/chatbot"
+              className="flex shrink-0 items-center gap-1.5 text-xs font-semibold text-cyan-600 hover:text-cyan-700"
+            >
+              {" "}
+              <SmartToyIcon sx={{ fontSize: 18 }} />{" "}
+              <span>AI Assistant</span>{" "}
+            </Link>{" "}
+          </div>
 
           <section className="my-5 py-4 text-center">
-            <p className="text-xs font-medium text-gray-600">Don't have an account?</p>
-            <Link to="/register" className="text-xs font-bold text-cyan-600 hover:underline">
+            <p className="text-xs font-medium text-gray-600">
+              Don't have an account?
+            </p>
+            <Link
+              to="/register"
+              className="text-xs font-bold text-cyan-600 hover:underline"
+            >
               Sign up
             </Link>
           </section>
         </form>
       </motion.div>
 
-      <p className="text-xs md:mt-10 text-gray-400">© 2025 GramHub from Meta</p>
+      {/* Chatbot Link */}
 
+      <p className="text-xs md:mt-10 text-gray-400">© 2025 GramHub from Meta</p>
       {loading && <Loader size="lg" />}
     </div>
   );

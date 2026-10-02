@@ -11,6 +11,6 @@ getRouter.get('/random-post', verifyToken, getRandomPost)
 getRouter.get('/profile-show/:username', getProfileShowData)
 getRouter.get('/fetch-comment-or-like/:postId', verifyToken, getCommentOrLike)
 getRouter.get('/follow-data/:type', verifyToken, getFollowData)
-getRouter.get('/user',verifyToken,getUser)
 getRouter.get('/user/post/:userId',verifyToken,getUserPosts)
+getRouter.get('/user',verifyToken,getUser)
 module.exports = { getRouter }
